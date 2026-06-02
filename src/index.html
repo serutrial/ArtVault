@@ -511,16 +511,16 @@
 </footer>
 
 <!-- Tauri API -->
-<script src="https://unpkg.com/@tauri-apps/api@1/dist/tauri.js"></script>
 <script>
 // ── Tauri invoke shorthand ──
-const invoke = window.__TAURI__ ? window.__TAURI__.tauri.invoke : null;
-const isTauri = !!window.__TAURI__;
-
 async function tauriCall(cmd, args) {
-  if (!isTauri) throw new Error('Not running in Tauri');
-  return invoke(cmd, args);
-}
+    for (let i = 0; i < 30; i++) {
+      if (window.__TAURI__) break;
+      await new Promise(r => setTimeout(r, 100));
+    }
+    if (!window.__TAURI__) throw new Error('Tauri runtime not found');
+    return window.__TAURI__.tauri.invoke(cmd, args);
+  }
 
 // ── Blob URL cache: filename → object URL ──
 let blobCache = {};

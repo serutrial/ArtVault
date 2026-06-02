@@ -237,6 +237,7 @@
     <li><a onclick="showPage('models')" id="nav-models">Models</a></li>
     <li><a onclick="showPage('images')" id="nav-images">Images</a></li>
     <li><a onclick="showPage('upload')" id="nav-upload">+ Add</a></li>
+    <li><a onclick="openSettings()" id="nav-settings">⚙ Settings</a></li>
   </ul>
   <div class="topbar-right">
     <div class="search-wrap">
@@ -250,7 +251,8 @@
 <!-- Storage info banner -->
 <div class="info-banner" id="infoBanner" style="display:none">
   <span>💾</span>
-  <span>Images stored in: <span class="ib-path" id="infoBannerPath"></span></span>
+  <span>Images folder: <span class="ib-path" id="infoBannerPath"></span></span>
+  <button class="btn btn-ghost btn-sm" style="margin-left:auto;font-size:11px" onclick="openSettings()">Change folder</button>
 </div>
 
 <main>
@@ -477,6 +479,34 @@
 
 </main>
 
+
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="settingsModal" onclick="closeSettings(event)">
+  <div class="modal" style="max-width:520px">
+    <button class="modal-close" onclick="closeSettings(null,true)">✕</button>
+    <div class="modal-title">⚙ Settings</div>
+
+    <div style="margin-bottom:24px">
+      <div class="meta-label" style="margin-bottom:8px">Images Storage Folder</div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-family:monospace;font-size:12px;color:var(--accent2);word-break:break-all;margin-bottom:10px" id="settingsFolderDisplay">Loading…</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="chooseFolder()">📂 Choose Folder</button>
+        <button class="btn btn-ghost" onclick="resetFolder()">↺ Reset to Default</button>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--text3);line-height:1.6">
+        All new images will be saved to this folder. Existing images already saved elsewhere will still load correctly.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div>
+      <div class="meta-label" style="margin-bottom:8px">Default AppData Folder</div>
+      <div style="font-family:monospace;font-size:11px;color:var(--text3);word-break:break-all" id="settingsDefaultDir">Loading…</div>
+    </div>
+  </div>
+</div>
+
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
   <div class="lightbox-inner">
@@ -510,17 +540,22 @@
   <div>ArtVault — Local AI Gallery · Images stored on your PC · No internet required</div>
 </footer>
 
-<!-- Tauri API -->
 <script>
-// ── Tauri invoke shorthand ──
+// ── Tauri invoke ──
 async function tauriCall(cmd, args) {
-    for (let i = 0; i < 30; i++) {
-      if (window.__TAURI__) break;
-      await new Promise(r => setTimeout(r, 100));
-    }
-    if (!window.__TAURI__) throw new Error('Tauri runtime not found');
-    return window.__TAURI__.tauri.invoke(cmd, args);
+  for (let i = 0; i < 30; i++) {
+    if (window.__TAURI__) break;
+    await new Promise(r => setTimeout(r, 100));
   }
+  if (!window.__TAURI__) throw new Error('Tauri runtime not found');
+  return window.__TAURI__.tauri.invoke(cmd, args);
+}
+
+// ── Custom images directory (null = use AppData default) ──
+// Stored in DB.settings.imagesDir and passed to every file Tauri call.
+function getCustomDir() {
+  return (DB && DB.settings && DB.settings.imagesDir) ? DB.settings.imagesDir : null;
+}
 
 // ── Blob URL cache: filename → object URL ──
 let blobCache = {};
@@ -542,7 +577,7 @@ async function getBlobURL(filename) {
   if (!filename) return null;
   if (blobCache[filename]) return blobCache[filename];
   try {
-    const bytes = await tauriCall('load_image_file', { filename });
+    const bytes = await tauriCall('load_image_file', { filename, customDir: getCustomDir() });
     const url = bytesToBlobURL(bytes, mimeFromName(filename));
     blobCache[filename] = url;
     return url;
@@ -563,15 +598,16 @@ async function loadDB() {
     const parsed = JSON.parse(json);
     DB.models = parsed.models || [];
     DB.images = parsed.images || [];
+    DB.settings = parsed.settings || {};
   } catch(e) { console.warn('DB load error', e); }
 }
 
 async function saveDB() {
   try {
-    // Never persist blob URLs — only store filenames + metadata
     const safe = {
       models: DB.models.map(m => { const c={...m}; delete c._blobUrl; return c; }),
       images: DB.images.map(i => { const c={...i}; delete c._blobUrl; return c; }),
+      settings: DB.settings || {},
     };
     await tauriCall('save_db', { data: JSON.stringify(safe) });
   } catch(e) { toast('Failed to save: ' + e, 'error'); }
@@ -580,10 +616,9 @@ async function saveDB() {
 // Show where images are stored
 async function showStorageInfo() {
   try {
-    const path = await tauriCall('get_images_dir', {});
-    const banner = document.getElementById('infoBanner');
+    const path = await tauriCall('get_images_dir', { customDir: getCustomDir() });
     document.getElementById('infoBannerPath').textContent = path;
-    banner.style.display = 'flex';
+    document.getElementById('infoBanner').style.display = 'flex';
   } catch(e) {}
 }
 
@@ -778,7 +813,7 @@ async function deleteImage(id){
   if(!confirm('Remove this image?\n(The file on disk will also be deleted.)')) return;
   const img=DB.images.find(i=>i.id===id);
   if(img&&img.filename){
-    try{ await tauriCall('delete_image_file',{filename:img.filename}); } catch(e){}
+    try{ await tauriCall('delete_image_file',{filename:img.filename, customDir:getCustomDir()}); } catch(e){}
     if(blobCache[img.filename]){URL.revokeObjectURL(blobCache[img.filename]);delete blobCache[img.filename];}
   }
   DB.images=DB.images.filter(i=>i.id!==id);
@@ -835,7 +870,7 @@ function downloadModel(id){const m=DB.models.find(x=>x.id===id);if(!m)return;if(
 async function deleteModel(id){
   if(!confirm('Remove this model?')) return;
   const m=DB.models.find(x=>x.id===id);
-  if(m&&m.coverFile){try{await tauriCall('delete_image_file',{filename:m.coverFile});}catch(e){}}
+  if(m&&m.coverFile){try{await tauriCall('delete_image_file',{filename:m.coverFile,customDir:getCustomDir()});}catch(e){}}
   DB.models=DB.models.filter(m=>m.id!==id);
   await saveDB();
   document.getElementById('modelModal').classList.remove('open');
@@ -875,7 +910,7 @@ async function saveModel(){
     const ext=pendingCoverFile.name.split('.').pop()||'jpg';
     coverFile='cover_'+Date.now()+'.'+ext;
     const buf=await pendingCoverFile.arrayBuffer();
-    await tauriCall('save_image_file',{filename:coverFile, data:Array.from(new Uint8Array(buf))});
+    await tauriCall('save_image_file',{filename:coverFile, data:Array.from(new Uint8Array(buf)), customDir:getCustomDir()});
     blobCache[coverFile]=URL.createObjectURL(pendingCoverFile);
   }
 
@@ -972,7 +1007,7 @@ async function saveImages(){
       // Read file as bytes and send to Rust
       const buf=await pf.file.arrayBuffer();
       const bytes=Array.from(new Uint8Array(buf));
-      await tauriCall('save_image_file',{filename:pf.filename, data:bytes});
+      await tauriCall('save_image_file',{filename:pf.filename, data:bytes, customDir:getCustomDir()});
       // Cache blob URL for immediate display
       blobCache[pf.filename]=pf.previewURL;
       saved++;
@@ -1065,7 +1100,61 @@ function toast(msg,type='success'){const area=document.getElementById('toastArea
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmt(n){return n>=1000?(n/1000).toFixed(1)+'k':n;}
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeLightbox(null,true);closeMModal(null,true);}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeLightbox(null,true);closeMModal(null,true);closeSettings(null,true);}});
+
+// ═══════════════════════════════════════════
+//  SETTINGS
+// ═══════════════════════════════════════════
+function openSettings() {
+  const cur = getCustomDir();
+  document.getElementById('settingsFolderDisplay').textContent = cur || '(Using default AppData folder)';
+  // Load and show the default path too
+  tauriCall('get_default_images_dir', {}).then(p => {
+    document.getElementById('settingsDefaultDir').textContent = p;
+    if (!cur) document.getElementById('settingsFolderDisplay').textContent = p + '  (default)';
+  }).catch(() => {});
+  document.getElementById('settingsModal').classList.add('open');
+}
+
+function closeSettings(e, force) {
+  if (force || (e && e.target === document.getElementById('settingsModal'))) {
+    document.getElementById('settingsModal').classList.remove('open');
+  }
+}
+
+async function chooseFolder() {
+  try {
+    const chosen = await tauriCall('pick_images_folder', {});
+    if (!chosen) return; // user cancelled
+    if (!DB.settings) DB.settings = {};
+    DB.settings.imagesDir = chosen;
+    await saveDB();
+    // Bust the blob cache — images might now be in a different location
+    blobCache = {};
+    document.getElementById('settingsFolderDisplay').textContent = chosen;
+    await showStorageInfo();
+    toast('Images folder updated! New images will save here.', 'success');
+    // Re-render so images reload from new path
+    renderImages();
+    renderHome();
+  } catch(e) {
+    toast('Could not open folder picker: ' + e, 'error');
+  }
+}
+
+async function resetFolder() {
+  if (!confirm('Reset to the default AppData folder?\nThis does not move any existing files.')) return;
+  if (!DB.settings) DB.settings = {};
+  DB.settings.imagesDir = null;
+  await saveDB();
+  blobCache = {};
+  const defaultPath = await tauriCall('get_default_images_dir', {});
+  document.getElementById('settingsFolderDisplay').textContent = defaultPath + '  (default)';
+  await showStorageInfo();
+  toast('Folder reset to default.', 'success');
+  renderImages();
+  renderHome();
+}
 
 // ── INIT ──
 async function init() {

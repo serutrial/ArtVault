@@ -3,42 +3,35 @@ name: Build ArtVault Windows EXE
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:   # allows manual trigger from the GitHub Actions tab
+  workflow_dispatch:
 
 jobs:
   build-windows:
     runs-on: windows-latest
 
     steps:
-      # 1 ── Checkout the repo
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2 ── Install Rust (stable)
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
           targets: x86_64-pc-windows-msvc
 
-      # 3 ── Cache Rust build artifacts (makes rebuilds much faster)
       - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: src-tauri
 
-      # 4 ── Install Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
-      # 5 ── Install JS dependencies
       - name: Install npm dependencies
         run: npm install
 
-      # 6 ── Build the Tauri app (produces .exe + .msi)
       - name: Build Tauri app
         uses: tauri-apps/tauri-action@v0
         env:
@@ -50,19 +43,12 @@ jobs:
             ## ArtVault — Local AI Gallery
 
             ### Install
-            - Download **ArtVault_1.0.0_x64_en-US.msi** and run it  
+            - Download **ArtVault_1.0.0_x64_en-US.msi** and run it
             - Or download **artvault.exe** for a portable version (no install needed)
-
-            ### What's new
-            - Fully offline desktop app
-            - Images saved directly to your PC — no storage limits
-            - Auto-reads EXIF metadata (A1111, SD.Next, ComfyUI, InvokeAI)
-            - Batch image upload
           releaseDraft: false
           prerelease: false
 
-      # 7 ── Also upload as a build artifact (downloadable from Actions tab)
-      - name: Upload MSI artifact
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ArtVault-Windows-Installer

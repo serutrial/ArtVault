@@ -1,58 +1,102 @@
-// Prevents additional console window on Windows in release
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::fs;
 use std::path::{Path, PathBuf};
 use tauri::{AppHandle, Manager};
 
-// ── Get the app data directory for storing DB JSON ──
-fn app_data_dir(app: &AppHandle) -> PathBuf {
-    app.path_resolver()
+// ── Default images dir (AppData/images) ──
+fn default_images_dir(app: &AppHandle) -> PathBuf {
+    let dir = app
+        .path_resolver()
         .app_data_dir()
         .expect("Failed to resolve app data dir")
-}
-
-// ── Get the images directory (inside app data) ──
-fn images_dir(app: &AppHandle) -> PathBuf {
-    let dir = app_data_dir(app).join("images");
+        .join("images");
     fs::create_dir_all(&dir).ok();
     dir
 }
 
+// ── Resolve the active images dir ──
+// If custom_dir is provided and non-empty, use it; otherwise use AppData/images.
+fn resolve_images_dir(app: &AppHandle, custom_dir: &Option<String>) -> PathBuf {
+    if let Some(dir) = custom_dir {
+        if !dir.is_empty() {
+            let p = PathBuf::from(dir);
+            fs::create_dir_all(&p).ok();
+            return p;
+        }
+    }
+    default_images_dir(app)
+}
+
+// ── DB lives in AppData always (never moves) ──
+fn db_path(app: &AppHandle) -> PathBuf {
+    let dir = app
+        .path_resolver()
+        .app_data_dir()
+        .expect("Failed to resolve app data dir");
+    fs::create_dir_all(&dir).ok();
+    dir.join("db.json")
+}
+
 // ─────────────────────────────────────────
-//  DATABASE — read/write the JSON metadata
+//  DATABASE
 // ─────────────────────────────────────────
 
-/// Load the full DB JSON string from disk. Returns empty object string if not found.
 #[tauri::command]
 fn load_db(app: AppHandle) -> String {
-    let path = app_data_dir(&app).join("db.json");
-    match fs::read_to_string(&path) {
-        Ok(contents) => contents,
-        Err(_) => r#"{"models":[],"images":[]}"#.to_string(),
+    match fs::read_to_string(db_path(&app)) {
+        Ok(c) => c,
+        Err(_) => r#"{"models":[],"images":[],"settings":{}}"#.to_string(),
     }
 }
 
-/// Save the full DB JSON string to disk.
 #[tauri::command]
 fn save_db(app: AppHandle, data: String) -> Result<(), String> {
-    let dir = app_data_dir(&app);
-    fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
-    let path = dir.join("db.json");
-    fs::write(&path, data).map_err(|e| e.to_string())
+    fs::write(db_path(&app), data).map_err(|e| e.to_string())
 }
 
 // ─────────────────────────────────────────
-//  IMAGES — save / load / delete files
+//  FOLDER PICKER
 // ─────────────────────────────────────────
 
-/// Save an image file to the images directory.
-/// `filename` is just the base filename (e.g. "myimage_1234.jpg").
-/// `data` is the raw bytes as a Vec<u8> (sent from JS as base64-decoded array).
+/// Open a native folder-picker dialog and return the chosen path.
+/// Returns an empty string if the user cancelled.
 #[tauri::command]
-fn save_image_file(app: AppHandle, filename: String, data: Vec<u8>) -> Result<String, String> {
-    let dir = images_dir(&app);
-    // Sanitize filename — strip any path separators
+async fn pick_images_folder(app: AppHandle) -> Result<String, String> {
+    let result = tauri::api::dialog::blocking::FileDialogBuilder::new()
+        .set_title("Choose folder to store images")
+        .pick_folder();
+
+    match result {
+        Some(path) => {
+            // Make sure the folder exists
+            fs::create_dir_all(&path).map_err(|e| e.to_string())?;
+            Ok(path.to_string_lossy().to_string())
+        }
+        None => Ok(String::new()), // user cancelled
+    }
+}
+
+/// Return the default AppData images path (shown as fallback in UI).
+#[tauri::command]
+fn get_default_images_dir(app: AppHandle) -> String {
+    default_images_dir(&app).to_string_lossy().to_string()
+}
+
+// ─────────────────────────────────────────
+//  IMAGE FILE OPERATIONS
+//  All accept an optional custom_dir.
+//  Pass null/empty to use AppData default.
+// ─────────────────────────────────────────
+
+#[tauri::command]
+fn save_image_file(
+    app: AppHandle,
+    filename: String,
+    data: Vec<u8>,
+    custom_dir: Option<String>,
+) -> Result<String, String> {
+    let dir = resolve_images_dir(&app, &custom_dir);
     let safe_name = Path::new(&filename)
         .file_name()
         .ok_or("Invalid filename")?
@@ -60,28 +104,39 @@ fn save_image_file(app: AppHandle, filename: String, data: Vec<u8>) -> Result<St
         .to_string();
     let path = dir.join(&safe_name);
     fs::write(&path, &data).map_err(|e| e.to_string())?;
-    // Return the absolute path so the frontend can use it as a src URI
     Ok(path.to_string_lossy().to_string())
 }
 
-/// Load an image file from the images directory and return its bytes.
-/// The frontend converts bytes → blob URL for display.
 #[tauri::command]
-fn load_image_file(app: AppHandle, filename: String) -> Result<Vec<u8>, String> {
-    let dir = images_dir(&app);
+fn load_image_file(
+    app: AppHandle,
+    filename: String,
+    custom_dir: Option<String>,
+) -> Result<Vec<u8>, String> {
+    let dir = resolve_images_dir(&app, &custom_dir);
     let safe_name = Path::new(&filename)
         .file_name()
         .ok_or("Invalid filename")?
         .to_string_lossy()
         .to_string();
     let path = dir.join(&safe_name);
+    // If not found in custom dir, fall back to default AppData dir
+    if !path.exists() {
+        let fallback = default_images_dir(&app).join(&safe_name);
+        if fallback.exists() {
+            return fs::read(&fallback).map_err(|e| e.to_string());
+        }
+    }
     fs::read(&path).map_err(|e| format!("Cannot read {}: {}", safe_name, e))
 }
 
-/// Delete an image file from the images directory.
 #[tauri::command]
-fn delete_image_file(app: AppHandle, filename: String) -> Result<(), String> {
-    let dir = images_dir(&app);
+fn delete_image_file(
+    app: AppHandle,
+    filename: String,
+    custom_dir: Option<String>,
+) -> Result<(), String> {
+    let dir = resolve_images_dir(&app, &custom_dir);
     let safe_name = Path::new(&filename)
         .file_name()
         .ok_or("Invalid filename")?
@@ -94,16 +149,16 @@ fn delete_image_file(app: AppHandle, filename: String) -> Result<(), String> {
     Ok(())
 }
 
-/// Return the absolute path of the images directory (for display purposes).
 #[tauri::command]
-fn get_images_dir(app: AppHandle) -> String {
-    images_dir(&app).to_string_lossy().to_string()
+fn get_images_dir(app: AppHandle, custom_dir: Option<String>) -> String {
+    resolve_images_dir(&app, &custom_dir)
+        .to_string_lossy()
+        .to_string()
 }
 
-/// List all filenames in the images directory (for re-syncing).
 #[tauri::command]
-fn list_image_files(app: AppHandle) -> Vec<String> {
-    let dir = images_dir(&app);
+fn list_image_files(app: AppHandle, custom_dir: Option<String>) -> Vec<String> {
+    let dir = resolve_images_dir(&app, &custom_dir);
     match fs::read_dir(&dir) {
         Ok(entries) => entries
             .filter_map(|e| e.ok())
@@ -119,6 +174,8 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             load_db,
             save_db,
+            pick_images_folder,
+            get_default_images_dir,
             save_image_file,
             load_image_file,
             delete_image_file,

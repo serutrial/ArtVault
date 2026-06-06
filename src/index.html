@@ -76,25 +76,21 @@
   .section-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; color: var(--text); }
   .section-sub { font-size: 13px; color: var(--text3); margin-top: 3px; }
 
-  /* MODEL GRID */
-  .model-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
-  .model-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: all 0.2s; cursor: pointer; position: relative; }
-  .model-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px var(--accent); background: var(--card-hover); }
-  .model-thumb-placeholder { width: 100%; aspect-ratio: 2/3; background: linear-gradient(135deg, var(--bg3) 0%, var(--card) 100%); display: flex; align-items: center; justify-content: center; font-size: 48px; color: var(--text3); position: relative; overflow: hidden; }
-  .model-thumb-placeholder::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.7) 100%); }
-  .model-badge { position: absolute; top: 8px; left: 8px; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; z-index: 2; text-transform: uppercase; letter-spacing: 0.04em; }
-  .badge-checkpoint { background: rgba(74,158,255,0.9); color: #fff; }
-  .badge-lora { background: rgba(155,109,255,0.9); color: #fff; }
-  .badge-lycoris { background: rgba(224,92,42,0.9); color: #fff; }
-  .badge-textinv { background: rgba(62,207,142,0.9); color: #fff; }
-  .badge-vae { background: rgba(245,200,66,0.9); color: #000; }
-  .badge-controlnet { background: rgba(255,92,92,0.9); color: #fff; }
-  .model-info { padding: 12px; }
-  .model-name { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .model-creator { font-size: 12px; color: var(--text3); display: flex; align-items: center; gap: 5px; margin-bottom: 8px; }
+  /* VIDEO GRID */
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .video-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: all 0.2s; cursor: pointer; position: relative; }
+  .video-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px var(--accent); background: var(--card-hover); }
+  .video-thumb { width: 100%; aspect-ratio: 16/9; background: #000; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .video-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .video-thumb-placeholder { width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, var(--bg3) 0%, var(--card) 100%); display: flex; align-items: center; justify-content: center; font-size: 48px; color: var(--text3); }
+  .video-play-icon { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.2s; font-size: 42px; }
+  .video-card:hover .video-play-icon { opacity: 1; }
+  .video-info { padding: 12px; }
+  .video-title { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .video-meta { font-size: 12px; color: var(--text3); display: flex; align-items: center; gap: 5px; margin-bottom: 8px; }
   .avatar-xs { width: 16px; height: 16px; border-radius: 50%; background: var(--accent); display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: #fff; flex-shrink: 0; }
-  .model-stats { display: flex; gap: 12px; font-size: 11px; color: var(--text3); }
-  .model-tags { margin-top: 8px; display: flex; gap: 4px; flex-wrap: wrap; }
+  .video-stats { display: flex; gap: 12px; font-size: 11px; color: var(--text3); }
+  .video-tags { margin-top: 8px; display: flex; gap: 4px; flex-wrap: wrap; }
   .tag { padding: 2px 8px; background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; font-size: 11px; color: var(--text3); }
 
   /* IMAGE MASONRY */
@@ -127,13 +123,29 @@
   .stat-desc { font-size: 12px; color: var(--text3); margin-top: 2px; }
 
   /* LIGHTBOX */
-  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; padding: 0; }
   .lightbox.open { display: flex; }
-  .lightbox-inner { position: relative; max-width: 940px; width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; display: flex; max-height: 90vh; }
-  .lightbox-img { flex: 0 0 58%; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-  .lightbox-img img { max-width: 100%; max-height: 88vh; object-fit: contain; display: block; }
-  .lightbox-meta { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; border-left: 1px solid var(--border); }
-  .lightbox-close { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); border: none; color: var(--text); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: background 0.15s; z-index: 2; }
+  /* Image lightbox — full screen with side panel */
+  .lightbox-inner { position: relative; width: 100%; height: 100vh; background: transparent; display: flex; max-width: none; border-radius: 0; border: none; overflow: hidden; }
+  .lightbox-img { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; cursor: zoom-in; }
+  .lightbox-img.zoomed { cursor: grab; }
+  .lightbox-img.zoomed.dragging { cursor: grabbing; }
+  .lightbox-img img { display: block; transform-origin: center center; transition: transform 0.15s ease; user-select: none; pointer-events: none; max-width: 100%; max-height: 100vh; object-fit: contain; }
+  .lightbox-meta { flex: 0 0 340px; width: 340px; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; border-left: 1px solid var(--border); background: var(--card); }
+  .lightbox-close { position: absolute; top: 14px; right: 14px; background: rgba(0,0,0,0.7); border: none; color: var(--text); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: background 0.15s; z-index: 10; }
+  .lightbox-close:hover { background: var(--accent); }
+  /* Nav arrows */
+  .lb-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.12); color: #fff; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; font-size: 22px; display: flex; align-items: center; justify-content: center; z-index: 10; transition: all 0.15s; backdrop-filter: blur(4px); }
+  .lb-arrow:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-50%) scale(1.08); }
+  .lb-arrow.lb-prev { left: 14px; }
+  .lb-arrow.lb-next { right: 360px; }
+  /* Zoom controls */
+  .lb-zoom-bar { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 24px; padding: 6px 16px; z-index: 10; }
+  .lb-zoom-bar button { background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background 0.15s; }
+  .lb-zoom-bar button:hover { background: rgba(255,255,255,0.15); }
+  .lb-zoom-label { font-size: 12px; color: rgba(255,255,255,0.7); min-width: 44px; text-align: center; font-family: monospace; }
+  /* Image counter */
+  .lb-counter { position: absolute; bottom: 16px; right: 360px; transform: translateX(-50%); background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 20px; padding: 5px 14px; font-size: 12px; color: rgba(255,255,255,0.7); z-index: 10; }
   .lightbox-close:hover { background: var(--accent); }
   .meta-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
   .meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
@@ -219,9 +231,10 @@
     .hero-title { font-size: 28px; }
     .hero-stats { gap: 24px; }
     .nav-links { display: none; }
-    .model-grid { grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); }
-    .lightbox-inner { flex-direction: column; }
-    .lightbox-img { flex: none; max-height: 50vh; }
+    .video-grid { grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); }
+    .lightbox-meta { flex: 0 0 260px; width: 260px; }
+    .lb-arrow.lb-next { right: 275px; }
+    .lb-counter { right: 275px; }
   }
 </style>
 </head>
@@ -234,7 +247,7 @@
   </a>
   <ul class="nav-links">
     <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
-    <li><a onclick="showPage('models')" id="nav-models">Models</a></li>
+    <li><a onclick="showPage('videos')" id="nav-videos">Videos</a></li>
     <li><a onclick="showPage('images')" id="nav-images">Images</a></li>
     <li><a onclick="showPage('upload')" id="nav-upload">+ Add</a></li>
     <li><a onclick="openSettings()" id="nav-settings">⚙ Settings</a></li>
@@ -242,7 +255,7 @@
   <div class="topbar-right">
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
-      <input type="text" placeholder="Search models, images…" id="globalSearch" oninput="doSearch(this.value)">
+      <input type="text" placeholder="Search videos, images…" id="globalSearch" oninput="doSearch(this.value)">
     </div>
     <button class="btn btn-primary btn-sm" onclick="showPage('upload')">+ Create</button>
   </div>
@@ -260,24 +273,24 @@
 <!-- HOME -->
 <div class="page active" id="page-home">
   <div class="hero">
-    <h1 class="hero-title">Discover & Share<br><span>AI Art Models</span></h1>
-    <p class="hero-sub">Your local desktop gallery for Stable Diffusion, Flux, LoRA and more. Everything runs offline — no internet needed.</p>
+    <h1 class="hero-title">Your Local<br><span>AI Gallery</span></h1>
+    <p class="hero-sub">Browse your AI-generated images and videos. Everything runs offline — no internet needed.</p>
     <div class="hero-actions">
-      <button class="btn btn-primary" onclick="showPage('models')">🧠 Browse Models</button>
-      <button class="btn btn-ghost" onclick="showPage('images')">🖼 View Gallery</button>
+      <button class="btn btn-primary" onclick="showPage('videos')">🎬 Browse Videos</button>
+      <button class="btn btn-ghost" onclick="showPage('images')">🖼 View Images</button>
     </div>
     <div class="hero-stats">
-      <div><span class="hero-stat-val" id="stat-models">0</span><span class="hero-stat-lbl">Models</span></div>
+      <div><span class="hero-stat-val" id="stat-videos">0</span><span class="hero-stat-lbl">Videos</span></div>
       <div><span class="hero-stat-val" id="stat-images">0</span><span class="hero-stat-lbl">Images</span></div>
       <div><span class="hero-stat-val" id="stat-creators">0</span><span class="hero-stat-lbl">Creators</span></div>
     </div>
   </div>
   <div class="container">
     <div class="section-header">
-      <div><div class="section-title">Featured Models</div><div class="section-sub">Top checkpoints, LoRAs, and more</div></div>
-      <button class="btn btn-ghost btn-sm" onclick="showPage('models')">View all →</button>
+      <div><div class="section-title">Recent Videos</div><div class="section-sub">Latest AI-generated videos</div></div>
+      <button class="btn btn-ghost btn-sm" onclick="showPage('videos')">View all →</button>
     </div>
-    <div class="model-grid" id="homeFeaturedModels"></div>
+    <div class="video-grid" id="homeFeaturedVideos"></div>
     <div class="section-header">
       <div><div class="section-title">Featured Images</div><div class="section-sub">Latest creations</div></div>
       <button class="btn btn-ghost btn-sm" onclick="showPage('images')">View all →</button>
@@ -286,44 +299,36 @@
   </div>
 </div>
 
-<!-- MODELS -->
-<div class="page" id="page-models">
+<!-- VIDEOS -->
+<div class="page" id="page-videos">
   <div class="tabs-row">
-    <div class="tab active" onclick="filterModelType('all',this)">All</div>
-    <div class="tab" onclick="filterModelType('Checkpoint',this)">Checkpoint</div>
-    <div class="tab" onclick="filterModelType('LoRA',this)">LoRA</div>
-    <div class="tab" onclick="filterModelType('LyCORIS',this)">LyCORIS</div>
-    <div class="tab" onclick="filterModelType('TextualInversion',this)">Textual Inversion</div>
-    <div class="tab" onclick="filterModelType('VAE',this)">VAE</div>
-    <div class="tab" onclick="filterModelType('ControlNet',this)">ControlNet</div>
+    <div class="tab active" onclick="filterVideoType('all',this)">All</div>
+    <div class="tab" onclick="filterVideoType('txt2vid',this)">Text-to-Video</div>
+    <div class="tab" onclick="filterVideoType('img2vid',this)">Image-to-Video</div>
+    <div class="tab" onclick="filterVideoType('vid2vid',this)">Video-to-Video</div>
   </div>
   <div class="container">
     <div class="filter-row">
-      <span class="filter-label">Base model:</span>
-      <div class="filter-chip" onclick="toggleChip(this,'base','SD 1.5')">SD 1.5</div>
-      <div class="filter-chip" onclick="toggleChip(this,'base','SDXL')">SDXL</div>
-      <div class="filter-chip" onclick="toggleChip(this,'base','Flux')">Flux</div>
-      <div class="filter-chip" onclick="toggleChip(this,'base','SD 3')">SD 3</div>
-      <span class="filter-label" style="margin-left:12px">Sort:</span>
-      <select class="form-input" style="width:140px;padding:5px 10px;font-size:12px" onchange="sortModels(this.value)">
-        <option value="newest">Newest</option>
-        <option value="popular">Most Popular</option>
-        <option value="downloads">Most Downloaded</option>
-        <option value="rating">Top Rated</option>
-        <option value="alpha">A–Z</option>
-      </select>
+      <span class="filter-label">Sort:</span>
+      <div class="filter-chip on" onclick="toggleVideoSort('newest',this)">Newest</div>
+      <div class="filter-chip" onclick="toggleVideoSort('popular',this)">Most Liked</div>
+      <div class="filter-chip" onclick="toggleVideoSort('random',this)">Random</div>
+      <span class="filter-label" style="margin-left:12px">Columns:</span>
+      <div class="filter-chip" onclick="setVideoCols(2)">2</div>
+      <div class="filter-chip on" onclick="setVideoCols(3)">3</div>
+      <div class="filter-chip" onclick="setVideoCols(4)">4</div>
     </div>
     <div class="stat-row">
-      <div class="stat-card"><div class="stat-number" id="sc-total">0</div><div class="stat-desc">Total Models</div></div>
-      <div class="stat-card"><div class="stat-number" id="sc-checkpoint">0</div><div class="stat-desc">Checkpoints</div></div>
-      <div class="stat-card"><div class="stat-number" id="sc-lora">0</div><div class="stat-desc">LoRAs</div></div>
-      <div class="stat-card"><div class="stat-number" id="sc-other">0</div><div class="stat-desc">Others</div></div>
+      <div class="stat-card"><div class="stat-number" id="vc-total">0</div><div class="stat-desc">Total Videos</div></div>
+      <div class="stat-card"><div class="stat-number" id="vc-txt2vid">0</div><div class="stat-desc">Text-to-Video</div></div>
+      <div class="stat-card"><div class="stat-number" id="vc-img2vid">0</div><div class="stat-desc">Image-to-Video</div></div>
+      <div class="stat-card"><div class="stat-number" id="vc-other">0</div><div class="stat-desc">Other</div></div>
     </div>
-    <div class="model-grid" id="modelsGrid"></div>
-    <div id="modelsEmpty" class="empty-state" style="display:none">
-      <div class="icon">📭</div><h3>No models yet</h3>
-      <p>Add your first model using the <strong>+ Create</strong> button.</p>
-      <button class="btn btn-primary" style="margin-top:16px" onclick="showPage('upload')">+ Add Model</button>
+    <div class="video-grid" id="videosGrid"></div>
+    <div id="videosEmpty" class="empty-state" style="display:none">
+      <div class="icon">🎬</div><h3>No videos yet</h3>
+      <p>Upload your AI-generated videos using the <strong>+ Create</strong> button.</p>
+      <button class="btn btn-primary" style="margin-top:16px" onclick="showPage('upload')">+ Add Video</button>
     </div>
   </div>
 </div>
@@ -362,59 +367,59 @@
       <div class="section-title">Add to Library</div>
     </div>
     <div style="display:flex; gap:12px; margin-bottom:28px;">
-      <button class="btn btn-primary" onclick="setUploadMode('model')" id="tab-model">🧠 Add Model</button>
+      <button class="btn btn-primary" onclick="setUploadMode('video')" id="tab-video">🎬 Add Video</button>
       <button class="btn btn-ghost" onclick="setUploadMode('image')" id="tab-image">🖼 Add Image</button>
     </div>
 
-    <!-- MODEL FORM -->
-    <div id="form-model">
+    <!-- VIDEO FORM -->
+    <div id="form-video">
       <div class="form-group">
-        <label class="form-label">Model Name *</label>
-        <input type="text" class="form-input" id="modelName" placeholder="e.g. Realistic Vision v5.1">
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div class="form-group">
-          <label class="form-label">Model Type *</label>
-          <select class="form-input" id="modelType">
-            <option>Checkpoint</option><option>LoRA</option><option>LyCORIS</option>
-            <option>TextualInversion</option><option>VAE</option><option>ControlNet</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Base Model</label>
-          <select class="form-input" id="modelBase">
-            <option>SD 1.5</option><option>SDXL</option><option>Flux</option><option>SD 3</option><option>Other</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Description</label>
-        <textarea class="form-input" id="modelDesc" placeholder="Describe your model, training data, usage tips…"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Tags (comma-separated)</label>
-        <input type="text" class="form-input" id="modelTags" placeholder="portrait, photorealistic, anime…">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Creator / Author</label>
-        <input type="text" class="form-input" id="modelCreator" placeholder="Your name or handle">
-      </div>
-      <div class="form-group">
-        <label class="form-label">File Path (local path to model file)</label>
-        <input type="text" class="form-input" id="modelPath" placeholder="C:\models\mymodel.safetensors">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Cover Image</label>
-        <div class="upload-zone" id="modelCoverZone">
-          <input type="file" id="modelCoverInput" accept="image/*" onchange="previewCover(event)">
-          <div id="modelCoverPreview">
-            <div class="upload-icon">🖼️</div>
-            <div class="upload-title">Upload Cover Image</div>
-            <div class="upload-sub">Click to browse · PNG, JPG, WEBP</div>
+        <label class="form-label">Video File(s) * <span style="color:var(--text3);font-weight:400;text-transform:none">(select multiple for batch add)</span></label>
+        <div class="upload-zone" id="videoDropZone">
+          <input type="file" id="videoFileInput" accept="video/*" multiple onchange="handleVideoFiles(this.files)">
+          <div id="videoFilePreview">
+            <div class="upload-icon">🎬</div>
+            <div class="upload-title">Choose Video(s)</div>
+            <div class="upload-sub">Click or drag & drop · MP4 / WEBM / MOV / GIF</div>
           </div>
         </div>
+        <div class="preview-thumbs" id="videoPreviewThumbs"></div>
       </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" onclick="saveModel()">💾 Save Model to Library</button>
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-input" id="videoTitleInput" placeholder="Give your video a name (optional)">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Positive Prompt</label>
+        <textarea class="form-input" id="videoPosPrompt" placeholder="cinematic, high quality, 4k…" rows="4"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Negative Prompt</label>
+        <textarea class="form-input" id="videoNegPrompt" placeholder="blurry, low quality…" rows="2"></textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="form-group mb-0"><label class="form-label">Model Used</label><input type="text" class="form-input" id="videoModel" placeholder="e.g. Wan2.1, CogVideoX…"></div>
+        <div class="form-group mb-0"><label class="form-label">Type</label>
+          <select class="form-input" id="videoType">
+            <option value="txt2vid">Text-to-Video</option>
+            <option value="img2vid">Image-to-Video</option>
+            <option value="vid2vid">Video-to-Video</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px">
+        <div class="form-group mb-0"><label class="form-label">Seed</label><input type="text" class="form-input" id="videoSeed" placeholder="12345678"></div>
+        <div class="form-group mb-0"><label class="form-label">Steps / CFG</label><input type="text" class="form-input" id="videoSteps" placeholder="30 / 7"></div>
+        <div class="form-group mb-0"><label class="form-label">Resolution</label><input type="text" class="form-input" id="videoSize" placeholder="1280x720"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
+        <div class="form-group mb-0"><label class="form-label">Duration / FPS</label><input type="text" class="form-input" id="videoDuration" placeholder="e.g. 4s / 24fps"></div>
+        <div class="form-group mb-0"><label class="form-label">Creator</label><input type="text" class="form-input" id="videoCreator" placeholder="Your name or handle"></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:20px">
+        <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="resetVideoForm()">↺ Clear</button>
+        <button class="btn btn-primary" style="flex:2;justify-content:center;padding:12px" onclick="saveVideos()">💾 Save to Gallery</button>
+      </div>
     </div>
 
     <!-- IMAGE FORM -->
@@ -507,22 +512,38 @@
   </div>
 </div>
 
+<!-- VIDEO LIGHTBOX -->
+<div class="lightbox" id="videoLightbox" onclick="closeVideoLightbox(event)">
+  <div class="lightbox-inner" style="max-width:1100px">
+    <button class="lightbox-close" onclick="closeVideoLightbox(null,true)">✕</button>
+    <div class="lightbox-img" id="vlbVideo" style="flex:0 0 62%;background:#000"></div>
+    <div class="lightbox-meta" id="vlbMeta"></div>
+  </div>
+</div>
+
 <!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+<div class="lightbox" id="lightbox">
   <div class="lightbox-inner">
     <button class="lightbox-close" onclick="closeLightbox(null,true)">✕</button>
-    <div class="lightbox-img" id="lbImg"></div>
+    <!-- Prev/Next arrows -->
+    <button class="lb-arrow lb-prev" id="lbPrev" onclick="lbNavigate(-1)" title="Previous (←)">&#8592;</button>
+    <button class="lb-arrow lb-next" id="lbNext" onclick="lbNavigate(1)"  title="Next (→)">&#8594;</button>
+    <!-- Image area -->
+    <div class="lightbox-img" id="lbImg">
+      <!-- Zoom bar -->
+      <div class="lb-zoom-bar" id="lbZoomBar">
+        <button onclick="lbZoomStep(-0.25)" title="Zoom out">&#8722;</button>
+        <span class="lb-zoom-label" id="lbZoomLabel">100%</span>
+        <button onclick="lbZoomStep(0.25)"  title="Zoom in">&#43;</button>
+        <button onclick="lbZoomReset()"      title="Reset zoom">&#8635;</button>
+      </div>
+      <!-- Counter -->
+      <div class="lb-counter" id="lbCounter">1 / 1</div>
+    </div>
     <div class="lightbox-meta" id="lbMeta"></div>
   </div>
 </div>
 
-<!-- MODEL MODAL -->
-<div class="modal-overlay" id="modelModal" onclick="closeMModal(event)">
-  <div class="modal">
-    <button class="modal-close" onclick="closeMModal(null,true)">✕</button>
-    <div id="modelModalContent"></div>
-  </div>
-</div>
 
 <!-- TOAST -->
 <div class="toast-area" id="toastArea"></div>
@@ -588,16 +609,16 @@ async function getBlobURL(filename) {
 }
 
 // ═══════════════════════════════════════════
-//  DATABASE  (stored as JSON file on disk via Tauri)
+//  DATABASE
 // ═══════════════════════════════════════════
-let DB = { models: [], images: [] };
+let DB = { videos: [], images: [], settings: {} };
 
 async function loadDB() {
   try {
     const json = await tauriCall('load_db', {});
     const parsed = JSON.parse(json);
-    DB.models = parsed.models || [];
-    DB.images = parsed.images || [];
+    DB.videos   = parsed.videos  || parsed.models || []; // migrate old 'models' key
+    DB.images   = parsed.images  || [];
     DB.settings = parsed.settings || {};
   } catch(e) { console.warn('DB load error', e); }
 }
@@ -605,15 +626,14 @@ async function loadDB() {
 async function saveDB() {
   try {
     const safe = {
-      models: DB.models.map(m => { const c={...m}; delete c._blobUrl; return c; }),
-      images: DB.images.map(i => { const c={...i}; delete c._blobUrl; return c; }),
+      videos:   DB.videos.map(v  => { const c={...v};  delete c._blobUrl; return c; }),
+      images:   DB.images.map(i  => { const c={...i};  delete c._blobUrl; return c; }),
       settings: DB.settings || {},
     };
     await tauriCall('save_db', { data: JSON.stringify(safe) });
   } catch(e) { toast('Failed to save: ' + e, 'error'); }
 }
 
-// Show where images are stored
 async function showStorageInfo() {
   try {
     const path = await tauriCall('get_images_dir', { customDir: getCustomDir() });
@@ -625,20 +645,19 @@ async function showStorageInfo() {
 // ═══════════════════════════════════════════
 //  SEED DATA
 // ═══════════════════════════════════════════
-const SAMPLE_MODELS = [
-  { id:'s1', name:'Realistic Vision v5.1', type:'Checkpoint', base:'SD 1.5', desc:'Highly realistic photographic style checkpoint.', tags:['photorealistic','portrait'], creator:'SamplerFan', path:'', coverFile:'', likes:4820, downloads:31500, rating:4.8, date:Date.now()-864e5*5 },
-  { id:'s2', name:'DreamShaper XL', type:'Checkpoint', base:'SDXL', desc:'Versatile SDXL checkpoint for artistic and realistic images.', tags:['versatile','artistic'], creator:'Lykon', path:'', coverFile:'', likes:3210, downloads:24800, rating:4.7, date:Date.now()-864e5*10 },
-  { id:'s3', name:'Detail Tweaker LoRA', type:'LoRA', base:'SD 1.5', desc:'Adds fine detail and texture to outputs.', tags:['detail','enhancement'], creator:'Lykon', path:'', coverFile:'', likes:1905, downloads:18200, rating:4.6, date:Date.now()-864e5*20 },
-  { id:'s4', name:'Anime Art Style XL', type:'LoRA', base:'SDXL', desc:'Clean anime illustration style LoRA for SDXL.', tags:['anime','illustration'], creator:'NijiArt', path:'', coverFile:'', likes:2770, downloads:15600, rating:4.5, date:Date.now()-864e5*15 },
+const SAMPLE_VIDEOS = [
+  { id:'v1', title:'Sunset Timelapse', filename:'', prompt:'cinematic sunset over mountains, golden hour, timelapse', neg:'blurry', model:'Wan2.1', type:'txt2vid', steps:'30 / 7', seed:'', size:'1280x720', duration:'4s / 24fps', creator:'SeruAR', likes:124, date:Date.now()-864e5 },
+  { id:'v2', title:'Cyberpunk Walk', filename:'', prompt:'woman walking in neon-lit cyberpunk city, rain, cinematic', neg:'ugly', model:'CogVideoX', type:'txt2vid', steps:'25 / 7', seed:'', size:'1024x576', duration:'3s / 16fps', creator:'SeruAR', likes:87, date:Date.now()-864e5*2 },
+  { id:'v3', title:'Fantasy Landscape', filename:'', prompt:'epic fantasy landscape, flying dragons, magical atmosphere', neg:'', model:'Wan2.1', type:'txt2vid', steps:'35 / 7.5', seed:'', size:'1280x720', duration:'5s / 24fps', creator:'SeruAR', likes:203, date:Date.now()-864e5*3 },
 ];
 const SAMPLE_IMAGES = [
-  { id:'i1', title:'Forest Spirit', filename:'', prompt:'mystical forest spirit, glowing eyes, ancient trees, fog, ethereal light', neg:'blurry, ugly', model:'DreamShaper XL', sampler:'DPM++ 2M Karras', steps:'25 / 7', seed:'', size:'', lora:'', creator:'NijiArt', likes:342, date:Date.now()-864e5 },
-  { id:'i2', title:'Cyberpunk Street', filename:'', prompt:'neon-lit cyberpunk alley, rain reflections, holographic billboards, cinematic', neg:'ugly', model:'Realistic Vision v5.1', sampler:'Euler a', steps:'20 / 7.5', seed:'', size:'', lora:'', creator:'SamplerFan', likes:218, date:Date.now()-864e5*2 },
-  { id:'i3', title:'Portrait', filename:'', prompt:'close up portrait, elegant woman, studio lighting, sharp focus', neg:'ugly, deformed', model:'Realistic Vision v5.1', sampler:'DPM++ 2M', steps:'30 / 6', seed:'', size:'', lora:'', creator:'Lykon', likes:455, date:Date.now()-864e5*3 },
+  { id:'i1', title:'Forest Spirit', filename:'', prompt:'mystical forest spirit, glowing eyes, ancient trees, fog, ethereal light', neg:'blurry, ugly', model:'DreamShaper XL', sampler:'DPM++ 2M Karras', steps:'25 / 7', seed:'', size:'', lora:'', creator:'SeruAR', likes:342, date:Date.now()-864e5 },
+  { id:'i2', title:'Cyberpunk Street', filename:'', prompt:'neon-lit cyberpunk alley, rain reflections, holographic billboards, cinematic', neg:'ugly', model:'Realistic Vision v5.1', sampler:'Euler a', steps:'20 / 7.5', seed:'', size:'', lora:'', creator:'SeruAR', likes:218, date:Date.now()-864e5*2 },
+  { id:'i3', title:'Portrait', filename:'', prompt:'close up portrait, elegant woman, studio lighting, sharp focus', neg:'ugly, deformed', model:'Realistic Vision v5.1', sampler:'DPM++ 2M', steps:'30 / 6', seed:'', size:'', lora:'', creator:'SeruAR', likes:455, date:Date.now()-864e5*3 },
 ];
 async function seedIfEmpty() {
-  if (DB.models.length===0 && DB.images.length===0) {
-    DB.models=[...SAMPLE_MODELS]; DB.images=[...SAMPLE_IMAGES];
+  if (DB.videos.length===0 && DB.images.length===0) {
+    DB.videos=[...SAMPLE_VIDEOS]; DB.images=[...SAMPLE_IMAGES];
     await saveDB();
   }
 }
@@ -646,7 +665,7 @@ async function seedIfEmpty() {
 // ═══════════════════════════════════════════
 //  FILTERS & NAV
 // ═══════════════════════════════════════════
-let filters = { modelType:'all', modelBase:[], modelSort:'newest', imageSort:'newest' };
+let filters = { videoType:'all', videoSort:'newest', imageSort:'newest' };
 
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -654,49 +673,51 @@ function showPage(name) {
   document.getElementById('page-'+name).classList.add('active');
   const nav=document.getElementById('nav-'+name); if(nav) nav.classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
-  if(name==='home') renderHome();
-  if(name==='models') renderModels();
+  if(name==='home')   renderHome();
+  if(name==='videos') renderVideos();
   if(name==='images') renderImages();
 }
 
 // ═══════════════════════════════════════════
-//  RENDER
+//  RENDER HOME
 // ═══════════════════════════════════════════
 function renderHome() {
-  const creators=new Set([...DB.models.map(m=>m.creator),...DB.images.map(i=>i.creator)].filter(Boolean));
-  document.getElementById('stat-models').textContent=DB.models.length;
-  document.getElementById('stat-images').textContent=DB.images.length;
-  document.getElementById('stat-creators').textContent=creators.size;
-  const top=[...DB.models].sort((a,b)=>(b.likes||0)-(a.likes||0)).slice(0,4);
-  document.getElementById('homeFeaturedModels').innerHTML=top.length?top.map(modelCardHTML).join(''):'<p style="padding:20px;color:var(--text3)">No models yet.</p>';
+  const creators=new Set([...DB.videos.map(v=>v.creator),...DB.images.map(i=>i.creator)].filter(Boolean));
+  document.getElementById('stat-videos').textContent   = DB.videos.length;
+  document.getElementById('stat-images').textContent   = DB.images.length;
+  document.getElementById('stat-creators').textContent = creators.size;
+  const topVids=[...DB.videos].sort((a,b)=>(b.likes||0)-(a.likes||0)).slice(0,6);
+  document.getElementById('homeFeaturedVideos').innerHTML = topVids.length ? topVids.map(videoCardHTML).join('') : '<p style="padding:20px;color:var(--text3)">No videos yet.</p>';
   const topImgs=[...DB.images].sort((a,b)=>(b.likes||0)-(a.likes||0)).slice(0,8);
-  document.getElementById('homeFeaturedImages').innerHTML=topImgs.length?topImgs.map(imageItemHTML).join(''):'<p style="padding:20px;color:var(--text3)">No images yet.</p>';
-  // Lazy-load images for home
+  document.getElementById('homeFeaturedImages').innerHTML = topImgs.length ? topImgs.map(imageItemHTML).join('') : '<p style="padding:20px;color:var(--text3)">No images yet.</p>';
   loadBlobsForVisible();
 }
 
-function renderModels() {
-  let list=[...DB.models];
-  if(filters.modelType!=='all') list=list.filter(m=>m.type===filters.modelType);
-  if(filters.modelBase.length>0) list=list.filter(m=>filters.modelBase.includes(m.base));
-  switch(filters.modelSort) {
-    case 'popular': list.sort((a,b)=>(b.likes||0)-(a.likes||0)); break;
-    case 'downloads': list.sort((a,b)=>(b.downloads||0)-(a.downloads||0)); break;
-    case 'rating': list.sort((a,b)=>(b.rating||0)-(a.rating||0)); break;
-    case 'alpha': list.sort((a,b)=>a.name.localeCompare(b.name)); break;
-    default: list.sort((a,b)=>b.date-a.date);
-  }
-  document.getElementById('sc-total').textContent=DB.models.length;
-  document.getElementById('sc-checkpoint').textContent=DB.models.filter(m=>m.type==='Checkpoint').length;
-  document.getElementById('sc-lora').textContent=DB.models.filter(m=>m.type==='LoRA'||m.type==='LyCORIS').length;
-  document.getElementById('sc-other').textContent=DB.models.filter(m=>!['Checkpoint','LoRA','LyCORIS'].includes(m.type)).length;
-  const grid=document.getElementById('modelsGrid');
-  const empty=document.getElementById('modelsEmpty');
+// ═══════════════════════════════════════════
+//  RENDER VIDEOS
+// ═══════════════════════════════════════════
+function renderVideos() {
+  let list=[...DB.videos];
+  if(filters.videoType!=='all') list=list.filter(v=>v.type===filters.videoType);
+  if(filters.videoSort==='popular') list.sort((a,b)=>(b.likes||0)-(a.likes||0));
+  else if(filters.videoSort==='random') list.sort(()=>Math.random()-0.5);
+  else list.sort((a,b)=>b.date-a.date);
+
+  document.getElementById('vc-total').textContent   = DB.videos.length;
+  document.getElementById('vc-txt2vid').textContent  = DB.videos.filter(v=>v.type==='txt2vid').length;
+  document.getElementById('vc-img2vid').textContent  = DB.videos.filter(v=>v.type==='img2vid').length;
+  document.getElementById('vc-other').textContent    = DB.videos.filter(v=>!['txt2vid','img2vid'].includes(v.type)).length;
+
+  const grid=document.getElementById('videosGrid');
+  const empty=document.getElementById('videosEmpty');
   if(list.length===0){grid.innerHTML='';empty.style.display='';}
-  else{empty.style.display='none';grid.innerHTML=list.map(modelCardHTML).join('');}
+  else{empty.style.display='none';grid.innerHTML=list.map(videoCardHTML).join('');}
   loadBlobsForVisible();
 }
 
+// ═══════════════════════════════════════════
+//  RENDER IMAGES
+// ═══════════════════════════════════════════
 function renderImages() {
   let list=[...DB.images];
   if(filters.imageSort==='popular') list.sort((a,b)=>(b.likes||0)-(a.likes||0));
@@ -709,43 +730,67 @@ function renderImages() {
   loadBlobsForVisible();
 }
 
-// After rendering, load real images from disk for all <img data-filename> elements
+// After rendering, resolve any data-filename placeholders to real blob URLs
 async function loadBlobsForVisible() {
-  const imgs = document.querySelectorAll('img[data-filename]');
-  for (const el of imgs) {
-    const fn = el.getAttribute('data-filename');
-    if (!fn) continue;
-    if (blobCache[fn]) { el.src = blobCache[fn]; el.removeAttribute('data-filename'); continue; }
-    const url = await getBlobURL(fn);
-    if (url) { el.src = url; el.removeAttribute('data-filename'); }
+  const els = document.querySelectorAll('[data-filename]');
+  for (const el of els) {
+    const fn = el.getAttribute('data-filename'); if(!fn) continue;
+    const url = blobCache[fn] || await getBlobURL(fn);
+    if (!url) continue;
+    if (el.tagName==='VIDEO' || el.tagName==='SOURCE') {
+      const video = el.tagName==='SOURCE' ? el.closest('video') : el;
+      if (el.tagName==='SOURCE') el.src=url; else el.src=url;
+      video.load();
+    } else {
+      el.src=url;
+    }
+    el.removeAttribute('data-filename');
   }
 }
 
 // ═══════════════════════════════════════════
 //  HTML BUILDERS
 // ═══════════════════════════════════════════
-const TYPE_COLORS={Checkpoint:'badge-checkpoint',LoRA:'badge-lora',LyCORIS:'badge-lycoris',TextualInversion:'badge-textinv',VAE:'badge-vae',ControlNet:'badge-controlnet'};
-const TYPE_EMOJIS={Checkpoint:'🧠',LoRA:'🎛',LyCORIS:'🔧',TextualInversion:'📝',VAE:'🔬',ControlNet:'📐'};
+const TYPE_LABELS = { txt2vid:'Text→Video', img2vid:'Image→Video', vid2vid:'Video→Video' };
 
-function modelCardHTML(m) {
-  const badge=TYPE_COLORS[m.type]||'badge-checkpoint';
-  const emoji=TYPE_EMOJIS[m.type]||'🧠';
-  const initials=(m.creator||'?').substring(0,2).toUpperCase();
-  const tags=(m.tags||[]).slice(0,3).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
-  const stars='★'.repeat(Math.round(m.rating||0))+'☆'.repeat(5-Math.round(m.rating||0));
-  const coverSrc = m.coverFile && blobCache[m.coverFile] ? blobCache[m.coverFile] : '';
-  const thumb = coverSrc
-    ? `<img src="${coverSrc}" style="width:100%;aspect-ratio:2/3;object-fit:cover;display:block">`
-    : m.coverFile
-      ? `<img data-filename="${esc(m.coverFile)}" src="" style="width:100%;aspect-ratio:2/3;object-fit:cover;display:block">`
-      : `<div class="model-thumb-placeholder"><span style="z-index:1">${emoji}</span></div>`;
-  return `<div class="model-card" onclick="openModelDetail('${m.id}')">
-    <div style="position:relative">${thumb}<span class="model-badge ${badge}">${m.type}</span></div>
-    <div class="model-info">
-      <div class="model-name" title="${esc(m.name)}">${esc(m.name)}</div>
-      <div class="model-creator"><span class="avatar-xs">${initials}</span>${esc(m.creator||'Unknown')}<span style="margin-left:auto;color:var(--yellow);font-size:11px">${stars}</span></div>
-      <div class="model-stats"><span>❤️ ${fmt(m.likes||0)}</span><span>⬇️ ${fmt(m.downloads||0)}</span><span style="margin-left:auto;color:var(--text3)">${esc(m.base||'')}</span></div>
-      ${tags?`<div class="model-tags">${tags}</div>`:''}
+function videoCardHTML(v) {
+  const label = TYPE_LABELS[v.type] || v.type || 'Video';
+  const initials = (v.creator||'?').substring(0,2).toUpperCase();
+  const tags = (v.tags||[]).slice(0,3).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
+  const cachedURL = v.filename && blobCache[v.filename];
+  const h = hashColor(v.id);
+
+  let thumbHTML;
+  if (cachedURL) {
+    thumbHTML = `<div class="video-thumb">
+      <video src="${cachedURL}" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover"
+        onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>
+      <div class="video-play-icon">▶</div>
+    </div>`;
+  } else if (v.filename) {
+    thumbHTML = `<div class="video-thumb">
+      <video data-filename="${esc(v.filename)}" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover"
+        onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>
+      <div class="video-play-icon">▶</div>
+    </div>`;
+  } else {
+    thumbHTML = `<div class="video-thumb-placeholder" style="background:${h}">${placeholderArt(v.id)}</div>`;
+  }
+
+  return `<div class="video-card" onclick="openVideoLightbox('${v.id}')">
+    ${thumbHTML}
+    <div class="video-info">
+      <div class="video-title" title="${esc(v.title||'Untitled')}">${esc(v.title||'Untitled')}</div>
+      <div class="video-meta">
+        <span class="avatar-xs">${initials}</span>${esc(v.creator||'Unknown')}
+        <span style="margin-left:auto;font-size:11px;color:var(--accent2)">${esc(label)}</span>
+      </div>
+      <div class="video-stats">
+        <span>❤️ ${v.likes||0}</span>
+        ${v.model?`<span>🤖 ${esc(v.model)}</span>`:''}
+        ${v.duration?`<span>⏱ ${esc(v.duration)}</span>`:''}
+      </div>
+      ${tags?`<div class="video-tags">${tags}</div>`:''}
     </div>
   </div>`;
 }
@@ -768,211 +813,473 @@ function hashColor(id){let h=0;for(let c of id)h=(h*31+c.charCodeAt(0))&0xffffff
 function placeholderArt(id){const emojis=['🌸','🌿','🔥','⚡','🌊','🏔','🌌','🦋','🐉','⚔','🪄','🎭','🦊','🌅'];let h=0;for(let c of id)h=(h*31+c.charCodeAt(0))&0xffffffff;return `<span style="font-size:48px;opacity:0.4">${emojis[Math.abs(h)%emojis.length]}</span>`;}
 
 // ═══════════════════════════════════════════
-//  LIGHTBOX
+//  VIDEO LIGHTBOX
 // ═══════════════════════════════════════════
-async function openLightbox(id) {
-  const img=DB.images.find(i=>i.id===id); if(!img) return;
-  const lbImg=document.getElementById('lbImg');
-  const lbMeta=document.getElementById('lbMeta');
+async function openVideoLightbox(id) {
+  const v=DB.videos.find(x=>x.id===id); if(!v) return;
+  const vlbVideo=document.getElementById('vlbVideo');
+  const vlbMeta=document.getElementById('vlbMeta');
 
-  // Load image from disk
-  let src = img.filename ? (blobCache[img.filename] || await getBlobURL(img.filename)) : null;
+  const src = v.filename ? (blobCache[v.filename] || await getBlobURL(v.filename)) : null;
   if(src){
-    lbImg.innerHTML=`<img src="${src}" style="max-width:100%;max-height:88vh;object-fit:contain">`;
+    vlbVideo.innerHTML=`<video src="${src}" controls autoplay muted loop style="max-width:100%;max-height:88vh;display:block"></video>`;
   } else {
-    const h=hashColor(img.id);
-    lbImg.innerHTML=`<div style="width:100%;height:400px;background:${h};display:flex;align-items:center;justify-content:center;font-size:80px">${placeholderArt(img.id)}</div>`;
+    const hc=hashColor(v.id);
+    vlbVideo.innerHTML=`<div style="width:100%;height:360px;background:${hc};display:flex;align-items:center;justify-content:center;font-size:80px">${placeholderArt(v.id)}</div>`;
   }
 
-  lbMeta.innerHTML=`
-    <div><div class="meta-label">Title</div><div class="meta-value" style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700">${esc(img.title||'Untitled')}</div></div>
+  const label=TYPE_LABELS[v.type]||v.type||'Video';
+  vlbMeta.innerHTML=`
+    <div><div class="meta-label">Title</div><div class="meta-value" style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700">${esc(v.title||'Untitled')}</div></div>
+    <div class="meta-row">
+      <div><div class="meta-label">Creator</div><div class="meta-value">${esc(v.creator||'Unknown')}</div></div>
+      <div><div class="meta-label">Likes</div><div class="meta-value text-accent">❤️ ${v.likes||0}</div></div>
+    </div>
+    <div class="meta-row">
+      <div><div class="meta-label">Type</div><div class="meta-value"><span class="pill pill-orange">${esc(label)}</span></div></div>
+      ${v.model?`<div><div class="meta-label">Model</div><div class="meta-value">${esc(v.model)}</div></div>`:''}
+    </div>
+    ${(v.steps||v.seed)?`<div class="meta-row">
+      ${v.steps?`<div><div class="meta-label">Steps / CFG</div><div class="meta-value">${esc(v.steps)}</div></div>`:''}
+      ${v.seed?`<div><div class="meta-label">Seed</div><div class="meta-value" style="font-family:monospace;font-size:12px">${esc(v.seed)}</div></div>`:''}
+    </div>`:''}
+    ${(v.size||v.duration)?`<div class="meta-row">
+      ${v.size?`<div><div class="meta-label">Resolution</div><div class="meta-value">${esc(v.size)}</div></div>`:''}
+      ${v.duration?`<div><div class="meta-label">Duration / FPS</div><div class="meta-value">${esc(v.duration)}</div></div>`:''}
+    </div>`:''}
+    ${v.prompt?`<div><div class="meta-label">Positive Prompt</div><div class="prompt-box">${esc(v.prompt)}</div></div>`:''}
+    ${v.neg?`<div><div class="meta-label">Negative Prompt</div><div class="prompt-box" style="color:var(--red)">${esc(v.neg)}</div></div>`:''}
+    ${v.filename?`<div><div class="meta-label">File</div><div class="meta-value" style="font-size:11px;font-family:monospace">${esc(v.filename)}</div></div>`:''}
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <button class="btn btn-primary btn-sm" onclick="likeVideo('${id}')">❤️ Like</button>
+      <button class="btn btn-ghost btn-sm" onclick="copyVideoPrompt('${id}')">📋 Copy Prompt</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteVideo('${id}')">🗑 Remove</button>
+    </div>
+  `;
+  document.getElementById('videoLightbox').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeVideoLightbox(e,force){
+  if(force||(e&&e.target===document.getElementById('videoLightbox'))){
+    // Stop video playback
+    const vid=document.querySelector('#vlbVideo video');
+    if(vid){vid.pause();vid.src='';}
+    document.getElementById('videoLightbox').classList.remove('open');
+    document.body.style.overflow='';
+  }
+}
+async function likeVideo(id){const v=DB.videos.find(x=>x.id===id);if(v){v.likes=(v.likes||0)+1;await saveDB();openVideoLightbox(id);}}
+function copyVideoPrompt(id){const v=DB.videos.find(x=>x.id===id);if(v&&v.prompt)navigator.clipboard.writeText(v.prompt).then(()=>toast('Prompt copied!','success'));}
+async function deleteVideo(id){
+  if(!confirm('Remove this video?\n(The file on disk will also be deleted.)')) return;
+  const v=DB.videos.find(x=>x.id===id);
+  if(v&&v.filename){
+    try{await tauriCall('delete_image_file',{filename:v.filename,customDir:getCustomDir()});}catch(e){}
+    if(blobCache[v.filename]){URL.revokeObjectURL(blobCache[v.filename]);delete blobCache[v.filename];}
+  }
+  DB.videos=DB.videos.filter(x=>x.id!==id);
+  await saveDB();
+  closeVideoLightbox(null,true);
+  renderVideos(); renderHome();
+  toast('Video removed','success');
+}
+
+// ═══════════════════════════════════════════
+//  IMAGE LIGHTBOX — with zoom, pan, navigation
+// ═══════════════════════════════════════════
+
+// State
+let lbCurrentId   = null;   // id of currently shown image
+let lbCurrentList = [];     // ordered list of image ids currently in view
+let lbZoom        = 1;      // current zoom level
+let lbPanX        = 0;      // pan offset X (px)
+let lbPanY        = 0;      // pan offset Y (px)
+let lbDragging    = false;
+let lbDragStartX  = 0;
+let lbDragStartY  = 0;
+let lbDragOriginX = 0;
+let lbDragOriginY = 0;
+
+// ── Build the sorted image list matching whatever the gallery currently shows ──
+function lbBuildList() {
+  let list = [...DB.images];
+  if (filters.imageSort === 'popular') list.sort((a,b) => (b.likes||0) - (a.likes||0));
+  else if (filters.imageSort === 'random') { /* keep DB order for nav consistency */ }
+  else list.sort((a,b) => b.date - a.date);
+  return list.map(i => i.id);
+}
+
+// ── Open lightbox for a given image id ──
+async function openLightbox(id) {
+  const img = DB.images.find(i => i.id === id);
+  if (!img) return;
+
+  lbCurrentList = lbBuildList();
+  lbCurrentId   = id;
+  lbZoomReset(false); // reset zoom without re-rendering
+
+  await lbRender(img);
+
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+// ── Render image + meta for a given image object ──
+async function lbRender(img) {
+  const lbImgEl  = document.getElementById('lbImg');
+  const lbMeta   = document.getElementById('lbMeta');
+  const lbZoomBar = document.getElementById('lbZoomBar');
+  const lbCounter = document.getElementById('lbCounter');
+
+  // Remove old img/placeholder (keep zoom bar + counter which are children)
+  const oldImg = lbImgEl.querySelector('img, .lb-placeholder');
+  if (oldImg) oldImg.remove();
+
+  // Load image from disk
+  const src = img.filename ? (blobCache[img.filename] || await getBlobURL(img.filename)) : null;
+  if (src) {
+    const imgEl = document.createElement('img');
+    imgEl.src = src;
+    imgEl.draggable = false;
+    lbApplyTransform(imgEl);
+    lbImgEl.insertBefore(imgEl, lbZoomBar);
+  } else {
+    const hc = hashColor(img.id);
+    const ph = document.createElement('div');
+    ph.className = 'lb-placeholder';
+    ph.style.cssText = `width:100%;height:100%;background:${hc};display:flex;align-items:center;justify-content:center;font-size:100px`;
+    ph.innerHTML = placeholderArt(img.id);
+    lbImgEl.insertBefore(ph, lbZoomBar);
+  }
+
+  // Counter
+  const idx  = lbCurrentList.indexOf(img.id);
+  const total = lbCurrentList.length;
+  lbCounter.textContent = `${idx + 1} / ${total}`;
+
+  // Arrow visibility
+  document.getElementById('lbPrev').style.opacity = idx <= 0           ? '0.25' : '1';
+  document.getElementById('lbNext').style.opacity = idx >= total - 1   ? '0.25' : '1';
+
+  // Zoom label
+  document.getElementById('lbZoomLabel').textContent = Math.round(lbZoom * 100) + '%';
+
+  // Meta panel
+  lbMeta.innerHTML = `
+    <div><div class="meta-label">Title</div>
+      <div class="meta-value" style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700">${esc(img.title||'Untitled')}</div>
+    </div>
     <div class="meta-row">
       <div><div class="meta-label">Creator</div><div class="meta-value">${esc(img.creator||'Unknown')}</div></div>
       <div><div class="meta-label">Likes</div><div class="meta-value text-accent">❤️ ${img.likes||0}</div></div>
     </div>
     ${img.model?`<div><div class="meta-label">Model</div><div class="meta-value">${esc(img.model)}</div></div>`:''}
-    ${img.sampler?`<div class="meta-row"><div><div class="meta-label">Sampler</div><div class="meta-value">${esc(img.sampler)}</div></div><div><div class="meta-label">Steps / CFG</div><div class="meta-value">${esc(img.steps||'—')}</div></div></div>`:''}
-    ${(img.seed||img.size)?`<div class="meta-row">${img.seed?`<div><div class="meta-label">Seed</div><div class="meta-value" style="font-family:monospace;font-size:12px">${esc(img.seed)}</div></div>`:''} ${img.size?`<div><div class="meta-label">Size</div><div class="meta-value">${esc(img.size)}</div></div>`:''}</div>`:''}
+    ${img.sampler?`<div class="meta-row">
+      <div><div class="meta-label">Sampler</div><div class="meta-value">${esc(img.sampler)}</div></div>
+      <div><div class="meta-label">Steps / CFG</div><div class="meta-value">${esc(img.steps||'—')}</div></div>
+    </div>`:''}
+    ${(img.seed||img.size)?`<div class="meta-row">
+      ${img.seed?`<div><div class="meta-label">Seed</div><div class="meta-value" style="font-family:monospace;font-size:12px">${esc(img.seed)}</div></div>`:''}
+      ${img.size?`<div><div class="meta-label">Size</div><div class="meta-value">${esc(img.size)}</div></div>`:''}
+    </div>`:''}
     ${img.lora?`<div><div class="meta-label">LoRA / VAE</div><div class="prompt-box" style="font-size:11px">${esc(img.lora)}</div></div>`:''}
     ${img.prompt?`<div><div class="meta-label">Positive Prompt</div><div class="prompt-box">${esc(img.prompt)}</div></div>`:''}
     ${img.neg?`<div><div class="meta-label">Negative Prompt</div><div class="prompt-box" style="color:var(--red)">${esc(img.neg)}</div></div>`:''}
     ${img.filename?`<div><div class="meta-label">File</div><div class="meta-value" style="font-size:11px;font-family:monospace">${esc(img.filename)}</div></div>`:''}
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-      <button class="btn btn-primary btn-sm" onclick="likeImage('${id}')">❤️ Like</button>
-      <button class="btn btn-ghost btn-sm" onclick="copyPrompt('${id}')">📋 Copy Prompt</button>
-      <button class="btn btn-danger btn-sm" onclick="deleteImage('${id}')">🗑 Remove</button>
+      <button class="btn btn-primary btn-sm" onclick="likeImage('${img.id}')">❤️ Like</button>
+      <button class="btn btn-ghost btn-sm"   onclick="copyPrompt('${img.id}')">📋 Copy Prompt</button>
+      <button class="btn btn-danger btn-sm"  onclick="deleteImage('${img.id}')">🗑 Remove</button>
     </div>
   `;
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow='hidden';
 }
-function closeLightbox(e,force){if(force||(e&&e.target===document.getElementById('lightbox'))){document.getElementById('lightbox').classList.remove('open');document.body.style.overflow='';}}
-async function likeImage(id){const img=DB.images.find(i=>i.id===id);if(img){img.likes=(img.likes||0)+1;await saveDB();openLightbox(id);}}
-function copyPrompt(id){const img=DB.images.find(i=>i.id===id);if(img&&img.prompt)navigator.clipboard.writeText(img.prompt).then(()=>toast('Prompt copied!','success'));}
-async function deleteImage(id){
-  if(!confirm('Remove this image?\n(The file on disk will also be deleted.)')) return;
-  const img=DB.images.find(i=>i.id===id);
-  if(img&&img.filename){
-    try{ await tauriCall('delete_image_file',{filename:img.filename, customDir:getCustomDir()}); } catch(e){}
-    if(blobCache[img.filename]){URL.revokeObjectURL(blobCache[img.filename]);delete blobCache[img.filename];}
+
+// ── Navigate prev / next ──
+async function lbNavigate(dir) {
+  const idx = lbCurrentList.indexOf(lbCurrentId);
+  const next = idx + dir;
+  if (next < 0 || next >= lbCurrentList.length) return;
+  const img = DB.images.find(i => i.id === lbCurrentList[next]);
+  if (!img) return;
+  lbCurrentId = img.id;
+  lbZoomReset(false);
+  await lbRender(img);
+}
+
+// ── Close ──
+function closeLightbox(e, force) {
+  if (force || (e && e.target === document.getElementById('lightbox'))) {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+    lbZoomReset(false);
   }
-  DB.images=DB.images.filter(i=>i.id!==id);
+}
+
+// ── Zoom helpers ──
+function lbApplyTransform(imgEl) {
+  if (!imgEl) imgEl = document.querySelector('#lbImg img');
+  if (!imgEl) return;
+  imgEl.style.transform = `scale(${lbZoom}) translate(${lbPanX / lbZoom}px, ${lbPanY / lbZoom}px)`;
+  const lbImgEl = document.getElementById('lbImg');
+  lbImgEl.classList.toggle('zoomed', lbZoom > 1);
+}
+
+function lbZoomStep(delta) {
+  lbZoom = Math.min(8, Math.max(0.25, lbZoom + delta));
+  if (lbZoom <= 1) { lbPanX = 0; lbPanY = 0; }
+  lbApplyTransform();
+  document.getElementById('lbZoomLabel').textContent = Math.round(lbZoom * 100) + '%';
+}
+
+function lbZoomReset(rerender = true) {
+  lbZoom = 1; lbPanX = 0; lbPanY = 0;
+  if (rerender) {
+    lbApplyTransform();
+    document.getElementById('lbZoomLabel').textContent = '100%';
+  }
+}
+
+// ── Mouse wheel zoom ──
+document.addEventListener('DOMContentLoaded', () => {
+  const lbEl = document.getElementById('lbImg');
+
+  // Wheel to zoom
+  lbEl.addEventListener('wheel', e => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    e.preventDefault();
+    const delta = e.deltaY < 0 ? 0.15 : -0.15;
+    lbZoomStep(delta);
+  }, { passive: false });
+
+  // Click on image area to zoom in/out (if not dragging)
+  lbEl.addEventListener('click', e => {
+    if (lbDragging) return;
+    if (e.target.closest('.lb-zoom-bar') || e.target.closest('.lb-counter')) return;
+    if (lbZoom < 2) lbZoomStep(0.5);
+    else lbZoomReset();
+  });
+
+  // Mouse drag to pan when zoomed
+  lbEl.addEventListener('mousedown', e => {
+    if (lbZoom <= 1) return;
+    if (e.target.closest('.lb-zoom-bar') || e.target.closest('.lb-counter')) return;
+    lbDragging   = false; // will flip to true on first move
+    lbDragStartX = e.clientX;
+    lbDragStartY = e.clientY;
+    lbDragOriginX = lbPanX;
+    lbDragOriginY = lbPanY;
+    lbEl.classList.add('dragging');
+    e.preventDefault();
+
+    const onMove = mv => {
+      const dx = mv.clientX - lbDragStartX;
+      const dy = mv.clientY - lbDragStartY;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) lbDragging = true;
+      lbPanX = lbDragOriginX + dx;
+      lbPanY = lbDragOriginY + dy;
+      lbApplyTransform();
+    };
+    const onUp = () => {
+      lbEl.classList.remove('dragging');
+      setTimeout(() => { lbDragging = false; }, 50);
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+    };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+  });
+
+  // Touch pinch-to-zoom
+  let lbTouchDist = null;
+  lbEl.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+      lbTouchDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+    }
+  }, { passive: true });
+  lbEl.addEventListener('touchmove', e => {
+    if (e.touches.length === 2 && lbTouchDist) {
+      const newDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      const ratio = newDist / lbTouchDist;
+      lbZoom = Math.min(8, Math.max(0.25, lbZoom * ratio));
+      lbTouchDist = newDist;
+      lbApplyTransform();
+      document.getElementById('lbZoomLabel').textContent = Math.round(lbZoom * 100) + '%';
+      e.preventDefault();
+    }
+  }, { passive: false });
+  lbEl.addEventListener('touchend', () => { lbTouchDist = null; });
+});
+
+async function likeImage(id) {
+  const img = DB.images.find(i => i.id === id);
+  if (img) { img.likes = (img.likes||0) + 1; await saveDB(); await lbRender(img); }
+}
+function copyPrompt(id) {
+  const img = DB.images.find(i => i.id === id);
+  if (img && img.prompt) navigator.clipboard.writeText(img.prompt).then(() => toast('Prompt copied!', 'success'));
+}
+async function deleteImage(id) {
+  if (!confirm('Remove this image?\n(The file on disk will also be deleted.)')) return;
+  const img = DB.images.find(i => i.id === id);
+  if (img && img.filename) {
+    try { await tauriCall('delete_image_file', { filename: img.filename, customDir: getCustomDir() }); } catch(e) {}
+    if (blobCache[img.filename]) { URL.revokeObjectURL(blobCache[img.filename]); delete blobCache[img.filename]; }
+  }
+  // Try to navigate to adjacent image before removing
+  const idx = lbCurrentList.indexOf(id);
+  DB.images = DB.images.filter(i => i.id !== id);
+  lbCurrentList = lbCurrentList.filter(i => i !== id);
   await saveDB();
-  document.getElementById('lightbox').classList.remove('open');
-  document.body.style.overflow='';
+  if (lbCurrentList.length === 0) {
+    closeLightbox(null, true);
+  } else {
+    const nextId = lbCurrentList[Math.min(idx, lbCurrentList.length - 1)];
+    lbCurrentId = nextId;
+    lbZoomReset(false);
+    await lbRender(DB.images.find(i => i.id === nextId));
+  }
   renderImages(); renderHome();
-  toast('Image removed','success');
+  toast('Image removed', 'success');
 }
 
 // ═══════════════════════════════════════════
-//  MODEL DETAIL
+//  UPLOAD — VIDEOS
 // ═══════════════════════════════════════════
-async function openModelDetail(id){
-  const m=DB.models.find(x=>x.id===id); if(!m) return;
-  const initials=(m.creator||'?').substring(0,2).toUpperCase();
-  const tags=(m.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
-  const stars='★'.repeat(Math.round(m.rating||0))+'☆'.repeat(5-Math.round(m.rating||0));
-  const emoji=TYPE_EMOJIS[m.type]||'🧠';
-  const badge=TYPE_COLORS[m.type]||'badge-checkpoint';
-  const coverSrc = m.coverFile ? (blobCache[m.coverFile] || await getBlobURL(m.coverFile)) : null;
-  document.getElementById('modelModalContent').innerHTML=`
-    <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:20px">
-      ${coverSrc?`<img src="${coverSrc}" style="width:80px;height:120px;object-fit:cover;border-radius:8px;flex-shrink:0">`:`<div style="width:80px;height:120px;background:var(--bg3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0">${emoji}</div>`}
-      <div style="flex:1;min-width:0">
-        <span class="model-badge ${badge}" style="position:static;display:inline-block;margin-bottom:8px">${m.type}</span>
-        <div class="modal-title" style="margin-bottom:6px">${esc(m.name)}</div>
-        <div class="model-creator"><span class="avatar-xs">${initials}</span>${esc(m.creator||'Unknown')}</div>
-        <div style="color:var(--yellow);font-size:13px">${stars} <span style="color:var(--text3)">(${m.rating||0})</span></div>
-      </div>
-    </div>
-    <div class="divider"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-      <div><div class="meta-label">Base Model</div><div class="meta-value"><span class="pill pill-blue">${esc(m.base||'Unknown')}</span></div></div>
-      <div><div class="meta-label">Downloads</div><div class="meta-value text-accent">⬇️ ${fmt(m.downloads||0)}</div></div>
-      <div><div class="meta-label">Likes</div><div class="meta-value">❤️ ${fmt(m.likes||0)}</div></div>
-      <div><div class="meta-label">Added</div><div class="meta-value">${new Date(m.date).toLocaleDateString()}</div></div>
-    </div>
-    ${m.desc?`<div class="form-group"><div class="meta-label">Description</div><div style="font-size:13px;color:var(--text2);line-height:1.6">${esc(m.desc)}</div></div>`:''}
-    ${tags?`<div class="form-group"><div class="meta-label">Tags</div><div class="model-tags">${tags}</div></div>`:''}
-    ${m.path?`<div class="form-group"><div class="meta-label">File Path</div><div class="prompt-box">${esc(m.path)}</div></div>`:''}
-    <div class="divider"></div>
-    <div class="flex gap-8">
-      <button class="btn btn-primary btn-sm" onclick="likeModel('${id}')">❤️ Like</button>
-      <button class="btn btn-ghost btn-sm" onclick="downloadModel('${id}')">⬇️ Open Path</button>
-      <button class="btn btn-danger btn-sm" onclick="deleteModel('${id}')">🗑 Remove</button>
-    </div>
-  `;
-  document.getElementById('modelModal').classList.add('open');
-}
-function closeMModal(e,force){if(force||(e&&e.target===document.getElementById('modelModal')))document.getElementById('modelModal').classList.remove('open');}
-async function likeModel(id){const m=DB.models.find(x=>x.id===id);if(m){m.likes=(m.likes||0)+1;await saveDB();openModelDetail(id);}}
-function downloadModel(id){const m=DB.models.find(x=>x.id===id);if(!m)return;if(m.path)toast('Path: '+m.path,'success');else toast('No file path set.','error');m.downloads=(m.downloads||0)+1;saveDB();}
-async function deleteModel(id){
-  if(!confirm('Remove this model?')) return;
-  const m=DB.models.find(x=>x.id===id);
-  if(m&&m.coverFile){try{await tauriCall('delete_image_file',{filename:m.coverFile,customDir:getCustomDir()});}catch(e){}}
-  DB.models=DB.models.filter(m=>m.id!==id);
-  await saveDB();
-  document.getElementById('modelModal').classList.remove('open');
-  renderModels();renderHome();
-  toast('Model removed','success');
-}
-
-// ═══════════════════════════════════════════
-//  UPLOAD — MODEL
-// ═══════════════════════════════════════════
-let uploadMode='model';
-let pendingCoverFile=null;
-let pendingFiles=[];
+let uploadMode='video';
+let pendingVideoFiles=[];
+let pendingImageFiles=[];
 
 function setUploadMode(mode){
   uploadMode=mode;
-  document.getElementById('form-model').style.display=mode==='model'?'':'none';
+  document.getElementById('form-video').style.display=mode==='video'?'':'none';
   document.getElementById('form-image').style.display=mode==='image'?'':'none';
-  document.getElementById('tab-model').className='btn '+(mode==='model'?'btn-primary':'btn-ghost');
+  document.getElementById('tab-video').className='btn '+(mode==='video'?'btn-primary':'btn-ghost');
   document.getElementById('tab-image').className='btn '+(mode==='image'?'btn-primary':'btn-ghost');
 }
 
-function previewCover(e){
-  const file=e.target.files[0]; if(!file) return;
-  pendingCoverFile=file;
-  const url=URL.createObjectURL(file);
-  document.getElementById('modelCoverPreview').innerHTML=`<img src="${url}" style="max-height:200px;border-radius:8px;max-width:100%">`;
+async function handleVideoFiles(files){
+  if(!files||!files.length) return;
+  pendingVideoFiles=[];
+  document.getElementById('videoPreviewThumbs').innerHTML='';
+  const arr=Array.from(files);
+  for(const file of arr){
+    const ext=file.name.split('.').pop()||'mp4';
+    const safeBase=file.name.replace(/[^a-zA-Z0-9._-]/g,'_').replace(/\.[^.]+$/,'');
+    const filename=safeBase+'_'+Date.now()+'.'+ext;
+    const previewURL=URL.createObjectURL(file);
+    pendingVideoFiles.push({file,filename,originalName:file.name,previewURL});
+    // Show video thumbnail preview
+    const vid=document.createElement('video');
+    vid.src=previewURL; vid.muted=true; vid.preload='metadata';
+    vid.style.cssText='width:72px;height:50px;object-fit:cover;border-radius:6px;border:1px solid var(--border)';
+    document.getElementById('videoPreviewThumbs').appendChild(vid);
+  }
+  document.getElementById('videoFilePreview').innerHTML=
+    `<div class="upload-icon">✅</div><div class="upload-title">${arr.length} file${arr.length>1?'s':''} selected</div><div class="upload-sub">Click to change selection</div>`;
+  const titleEl=document.getElementById('videoTitleInput');
+  if(!titleEl.value) titleEl.value=arr[0].name.replace(/\.[^.]+$/,'').replace(/[-_]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
 }
 
-async function saveModel(){
-  const name=document.getElementById('modelName').value.trim();
-  if(!name){toast('Model name is required!','error');return;}
-  const tags=document.getElementById('modelTags').value.split(',').map(t=>t.trim()).filter(Boolean);
+// Drag and drop for video
+(function(){
+  const dz=document.getElementById('videoDropZone'); if(!dz) return;
+  dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');});
+  dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
+  dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');if(e.dataTransfer.files.length)handleVideoFiles(e.dataTransfer.files);});
+})();
 
-  let coverFile='';
-  if(pendingCoverFile){
-    const ext=pendingCoverFile.name.split('.').pop()||'jpg';
-    coverFile='cover_'+Date.now()+'.'+ext;
-    const buf=await pendingCoverFile.arrayBuffer();
-    await tauriCall('save_image_file',{filename:coverFile, data:Array.from(new Uint8Array(buf)), customDir:getCustomDir()});
-    blobCache[coverFile]=URL.createObjectURL(pendingCoverFile);
+function showLoading(msg){document.getElementById('loadingMsg').textContent=msg||'Saving…';document.getElementById('loadingOverlay').classList.add('show');}
+function hideLoading(){document.getElementById('loadingOverlay').classList.remove('show');}
+
+async function saveVideos(){
+  if(!pendingVideoFiles.length){toast('Please select at least one video.','error');return;}
+  const base={
+    prompt:   document.getElementById('videoPosPrompt').value.trim(),
+    neg:      document.getElementById('videoNegPrompt').value.trim(),
+    model:    document.getElementById('videoModel').value.trim(),
+    type:     document.getElementById('videoType').value,
+    steps:    document.getElementById('videoSteps').value.trim(),
+    seed:     document.getElementById('videoSeed').value.trim(),
+    size:     document.getElementById('videoSize').value.trim(),
+    duration: document.getElementById('videoDuration').value.trim(),
+    creator:  document.getElementById('videoCreator').value.trim()||'You',
+    likes:0, date:Date.now(),
+  };
+  const titleBase=document.getElementById('videoTitleInput').value.trim();
+  showLoading(`Saving ${pendingVideoFiles.length} video${pendingVideoFiles.length>1?'s':''}…`);
+  let saved=0,failed=0;
+  for(let i=0;i<pendingVideoFiles.length;i++){
+    const pf=pendingVideoFiles[i];
+    try{
+      const buf=await pf.file.arrayBuffer();
+      const bytes=Array.from(new Uint8Array(buf));
+      await tauriCall('save_image_file',{filename:pf.filename,data:bytes,customDir:getCustomDir()});
+      blobCache[pf.filename]=pf.previewURL;
+      saved++;
+    }catch(e){console.warn('Failed to save',pf.filename,e);failed++;}
+    const title=pendingVideoFiles.length>1
+      ?(titleBase?titleBase+' '+(i+1):pf.originalName.replace(/\.[^.]+$/,''))
+      :(titleBase||pf.originalName.replace(/\.[^.]+$/,''));
+    DB.videos.push({id:'vid'+Date.now()+i, title, filename:pf.filename, ...base});
   }
-
-  DB.models.push({
-    id:'u'+Date.now(), name,
-    type:document.getElementById('modelType').value,
-    base:document.getElementById('modelBase').value,
-    desc:document.getElementById('modelDesc').value.trim(),
-    tags, creator:document.getElementById('modelCreator').value.trim()||'You',
-    path:document.getElementById('modelPath').value.trim(),
-    coverFile, likes:0, downloads:0, rating:0, date:Date.now(),
-  });
   await saveDB();
-  ['modelName','modelDesc','modelTags','modelCreator','modelPath'].forEach(id=>document.getElementById(id).value='');
-  pendingCoverFile=null;
-  document.getElementById('modelCoverPreview').innerHTML=`<div class="upload-icon">🖼️</div><div class="upload-title">Upload Cover Image</div><div class="upload-sub">Click to browse · PNG, JPG, WEBP</div>`;
-  toast('Model added! 🎉','success');
-  showPage('models');
+  hideLoading();
+  if(failed>0) toast(`${saved} saved, ${failed} failed.`,'error');
+  else toast(`${pendingVideoFiles.length} video${pendingVideoFiles.length>1?'s':''} added! 🎬`,'success');
+  resetVideoForm();
+  showPage('videos');
+}
+
+function resetVideoForm(){
+  pendingVideoFiles=[];
+  document.getElementById('videoPreviewThumbs').innerHTML='';
+  document.getElementById('videoFileInput').value='';
+  document.getElementById('videoFilePreview').innerHTML=`<div class="upload-icon">🎬</div><div class="upload-title">Choose Video(s)</div><div class="upload-sub">Click or drag & drop · MP4 / WEBM / MOV / GIF</div>`;
+  ['videoTitleInput','videoPosPrompt','videoNegPrompt','videoModel','videoSteps','videoSeed','videoSize','videoDuration','videoCreator'].forEach(id=>document.getElementById(id).value='');
 }
 
 // ═══════════════════════════════════════════
-//  UPLOAD — IMAGES (reads file → bytes → Tauri write)
+//  UPLOAD — IMAGES (unchanged)
 // ═══════════════════════════════════════════
 async function handleImageFiles(files){
   if(!files||!files.length) return;
-  pendingFiles=[];
+  pendingImageFiles=[];
   document.getElementById('previewThumbs').innerHTML='';
   document.getElementById('metaBanner').className='meta-banner';
   document.getElementById('imageRawMeta').textContent='No metadata detected yet.';
-
   const arr=Array.from(files);
   for(const file of arr){
     const ext=file.name.split('.').pop()||'jpg';
     const safeBase=file.name.replace(/[^a-zA-Z0-9._-]/g,'_').replace(/\.[^.]+$/,'');
     const filename=safeBase+'_'+Date.now()+'.'+ext;
     const previewURL=URL.createObjectURL(file);
-    pendingFiles.push({file,filename,originalName:file.name,previewURL});
+    pendingImageFiles.push({file,filename,originalName:file.name,previewURL});
     const thumb=document.createElement('img');
     thumb.className='preview-thumb'; thumb.src=previewURL;
     document.getElementById('previewThumbs').appendChild(thumb);
   }
-
   document.getElementById('imageFilePreview').innerHTML=
     `<div class="upload-icon">✅</div><div class="upload-title">${arr.length} file${arr.length>1?'s':''} selected</div><div class="upload-sub">Click to change selection</div>`;
-
   const titleEl=document.getElementById('imageTitleInput');
   if(!titleEl.value) titleEl.value=arr[0].name.replace(/\.[^.]+$/,'').replace(/[-_]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-
   try{
-    const {parsed,raw}=await extractImageMetadata(pendingFiles[0].file);
+    const {parsed,raw}=await extractImageMetadata(pendingImageFiles[0].file);
     const rawKeys=Object.keys(raw);
     document.getElementById('imageRawMeta').textContent=rawKeys.length
       ?Object.entries(raw).map(([k,v])=>`[${k}]\n${typeof v==='string'&&v.length>600?v.slice(0,600)+'…':v}`).join('\n\n')
       :'No metadata found.';
     if(parsed&&(parsed.prompt||parsed.model||parsed.sampler)){
-      const filled=autofillImageForm(parsed);
-      showMetaBanner(filled,rawKeys,arr.length);
+      const filled=autofillImageForm(parsed); showMetaBanner(filled,rawKeys,arr.length);
     } else { showMetaBanner([],rawKeys,arr.length); }
   }catch(err){console.warn('Metadata error:',err);showMetaBanner([],[],arr.length);}
 }
 
-// Drag and drop
 (function(){
   const dz=document.getElementById('imageDropZone'); if(!dz) return;
   dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');});
@@ -980,57 +1287,47 @@ async function handleImageFiles(files){
   dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');if(e.dataTransfer.files.length)handleImageFiles(e.dataTransfer.files);});
 })();
 
-function showLoading(msg){document.getElementById('loadingMsg').textContent=msg||'Saving…';document.getElementById('loadingOverlay').classList.add('show');}
-function hideLoading(){document.getElementById('loadingOverlay').classList.remove('show');}
-
 async function saveImages(){
-  if(!pendingFiles.length){toast('Please select at least one image.','error');return;}
+  if(!pendingImageFiles.length){toast('Please select at least one image.','error');return;}
   const base={
-    prompt:document.getElementById('imagePosPrompt').value.trim(),
-    neg:document.getElementById('imageNegPrompt').value.trim(),
-    model:document.getElementById('imageModel').value.trim(),
-    sampler:document.getElementById('imageSampler').value.trim(),
-    steps:document.getElementById('imageSteps').value.trim(),
-    seed:document.getElementById('imageSeed').value.trim(),
-    size:document.getElementById('imageSize').value.trim(),
-    lora:document.getElementById('imageLoRA').value.trim(),
-    creator:document.getElementById('imageCreator').value.trim()||'You',
+    prompt:  document.getElementById('imagePosPrompt').value.trim(),
+    neg:     document.getElementById('imageNegPrompt').value.trim(),
+    model:   document.getElementById('imageModel').value.trim(),
+    sampler: document.getElementById('imageSampler').value.trim(),
+    steps:   document.getElementById('imageSteps').value.trim(),
+    seed:    document.getElementById('imageSeed').value.trim(),
+    size:    document.getElementById('imageSize').value.trim(),
+    lora:    document.getElementById('imageLoRA').value.trim(),
+    creator: document.getElementById('imageCreator').value.trim()||'You',
     likes:0, date:Date.now(),
   };
   const titleBase=document.getElementById('imageTitleInput').value.trim();
-  showLoading(`Saving ${pendingFiles.length} image${pendingFiles.length>1?'s':''}…`);
-
+  showLoading(`Saving ${pendingImageFiles.length} image${pendingImageFiles.length>1?'s':''}…`);
   let saved=0,failed=0;
-  for(let i=0;i<pendingFiles.length;i++){
-    const pf=pendingFiles[i];
+  for(let i=0;i<pendingImageFiles.length;i++){
+    const pf=pendingImageFiles[i];
     try{
-      // Read file as bytes and send to Rust
       const buf=await pf.file.arrayBuffer();
       const bytes=Array.from(new Uint8Array(buf));
-      await tauriCall('save_image_file',{filename:pf.filename, data:bytes, customDir:getCustomDir()});
-      // Cache blob URL for immediate display
+      await tauriCall('save_image_file',{filename:pf.filename,data:bytes,customDir:getCustomDir()});
       blobCache[pf.filename]=pf.previewURL;
       saved++;
-    }catch(e){
-      console.warn('Failed to save',pf.filename,e);
-      failed++;
-    }
-    const title=pendingFiles.length>1
+    }catch(e){console.warn('Failed to save',pf.filename,e);failed++;}
+    const title=pendingImageFiles.length>1
       ?(titleBase?titleBase+' '+(i+1):pf.originalName.replace(/\.[^.]+$/,''))
       :(titleBase||pf.originalName.replace(/\.[^.]+$/,''));
-    DB.images.push({id:'img'+Date.now()+i, title, filename:pf.filename, ...base});
+    DB.images.push({id:'img'+Date.now()+i,title,filename:pf.filename,...base});
   }
-
   await saveDB();
   hideLoading();
   if(failed>0) toast(`${saved} saved, ${failed} failed.`,'error');
-  else toast(`${pendingFiles.length} image${pendingFiles.length>1?'s':''} added! 🖼️`,'success');
+  else toast(`${pendingImageFiles.length} image${pendingImageFiles.length>1?'s':''} added! 🖼️`,'success');
   resetImageForm();
   showPage('images');
 }
 
 function resetImageForm(){
-  pendingFiles=[];
+  pendingImageFiles=[];
   document.getElementById('previewThumbs').innerHTML='';
   document.getElementById('imageFileInput').value='';
   document.getElementById('imageFilePreview').innerHTML=`<div class="upload-icon">📤</div><div class="upload-title">Choose Image(s)</div><div class="upload-sub">Click or drag & drop · JPEG / PNG / WEBP · Metadata auto-detected ✨</div>`;
@@ -1044,8 +1341,7 @@ function autofillImageForm(parsed){
   const filled=[];
   const labelMap={imagePosPrompt:'Prompt',imageNegPrompt:'Negative Prompt',imageModel:'Model',imageSampler:'Sampler',imageSteps:'Steps/CFG',imageSeed:'Seed',imageSize:'Size',imageLoRA:'LoRA/VAE'};
   for(const [id,val] of Object.entries(fieldMap)){
-    if(!val) continue;
-    const el=document.getElementById(id); if(!el) continue;
+    if(!val) continue; const el=document.getElementById(id); if(!el) continue;
     el.value=val; el.classList.add('field-autofilled');
     setTimeout(()=>el.classList.remove('field-autofilled'),3000);
     filled.push(labelMap[id]);
@@ -1061,7 +1357,7 @@ function showMetaBanner(filled,rawKeys,totalFiles){
 }
 
 // ═══════════════════════════════════════════
-//  METADATA EXTRACTION ENGINE (same as before)
+//  METADATA EXTRACTION (images only, unchanged)
 // ═══════════════════════════════════════════
 function extractJPEGUserComment(buffer){const data=new Uint8Array(buffer);if(data[0]!==0xFF||data[1]!==0xD8)return null;let i=2;while(i<data.length-3){if(data[i]!==0xFF){i++;continue;}while(i<data.length&&data[i]===0xFF)i++;const marker=data[i++];if(marker===0xD9||marker===0xDA)break;if(marker===0xD8||marker===0x01)continue;const segLen=(data[i]<<8)|data[i+1];const segStart=i+2;i+=segLen;if(marker===0xE1&&segLen>6){const hdr=String.fromCharCode(data[segStart],data[segStart+1],data[segStart+2],data[segStart+3]);if(hdr==='Exif'){const uc=parseExifUserComment(buffer.slice(segStart,segStart+segLen));if(uc)return uc;}}if(i>data.length)break;}return null;}
 function parseExifUserComment(segBuf){try{const view=new DataView(segBuf);const tiffOffset=6;const bo=view.getUint16(tiffOffset);const le=(bo===0x4949);const r16=o=>le?view.getUint16(tiffOffset+o,true):view.getUint16(tiffOffset+o,false);const r32=o=>le?view.getUint32(tiffOffset+o,true):view.getUint32(tiffOffset+o,false);function findUC(ifdOff){const n=r16(ifdOff);for(let i=0;i<n;i++){const eo=tiffOffset+ifdOff+2+i*12;if(eo+12>segBuf.byteLength)break;const tag=le?view.getUint16(eo,true):view.getUint16(eo,false);const cnt=le?view.getUint32(eo+4,true):view.getUint32(eo+4,false);if(tag===0x9286){const sz=cnt;const doff=sz>4?tiffOffset+(le?view.getUint32(eo+8,true):view.getUint32(eo+8,false)):eo+8;return decodeUserComment(segBuf,doff,sz);}}return null;}const ifd0=r32(4);const n0=r16(ifd0);let exifPtr=-1;let ucDirect=null;for(let i=0;i<n0;i++){const eo=tiffOffset+ifd0+2+i*12;const tag=le?view.getUint16(eo,true):view.getUint16(eo,false);if(tag===0x8769)exifPtr=le?view.getUint32(eo+8,true):view.getUint32(eo+8,false);if(tag===0x9286){const cnt=le?view.getUint32(eo+4,true):view.getUint32(eo+4,false);const d=cnt>4?tiffOffset+(le?view.getUint32(eo+8,true):view.getUint32(eo+8,false)):eo+8;ucDirect=decodeUserComment(segBuf,d,cnt);}}if(ucDirect)return ucDirect;if(exifPtr>0)return findUC(exifPtr);return null;}catch(e){return null;}}
@@ -1077,20 +1373,20 @@ async function extractImageMetadata(file){const buffer=await file.arrayBuffer();
 // ═══════════════════════════════════════════
 //  FILTER HELPERS
 // ═══════════════════════════════════════════
-function filterModelType(type,el){filters.modelType=type;document.querySelectorAll('#page-models .tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderModels();}
-function toggleChip(el,group,value){el.classList.toggle('on');if(group==='base'){if(el.classList.contains('on'))filters.modelBase.push(value);else filters.modelBase=filters.modelBase.filter(v=>v!==value);}renderModels();}
-function sortModels(val){filters.modelSort=val;renderModels();}
+function filterVideoType(type,el){filters.videoType=type;document.querySelectorAll('#page-videos .tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderVideos();}
+function toggleVideoSort(sort,el){filters.videoSort=sort;document.querySelectorAll('#page-videos .filter-row .filter-chip').forEach(c=>{if(c.getAttribute('onclick')&&c.getAttribute('onclick').includes('toggleVideoSort'))c.classList.remove('on');});el.classList.add('on');renderVideos();}
+function setVideoCols(n){document.getElementById('videosGrid').style.gridTemplateColumns=`repeat(${n},1fr)`;document.querySelectorAll('#page-videos .filter-row .filter-chip').forEach(c=>{if(c.getAttribute('onclick')&&c.getAttribute('onclick').includes('setVideoCols'))c.classList.remove('on');});event.currentTarget.classList.add('on');}
 function filterImageType(type,el){document.querySelectorAll('#page-images .tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderImages();}
-function toggleImageSort(sort,el){filters.imageSort=sort;document.querySelectorAll('#page-images .filter-chip').forEach(c=>{if(c.getAttribute('onclick')&&c.getAttribute('onclick').includes('toggleImageSort'))c.classList.remove('on');});el.classList.add('on');renderImages();}
+function toggleImageSort(sort,el){filters.imageSort=sort;document.querySelectorAll('#page-images .filter-row .filter-chip').forEach(c=>{if(c.getAttribute('onclick')&&c.getAttribute('onclick').includes('toggleImageSort'))c.classList.remove('on');});el.classList.add('on');renderImages();}
 function setImageCols(n){document.getElementById('imagesGrid').style.columns=n;document.querySelectorAll('#page-images .filter-row .filter-chip').forEach(c=>{if(c.getAttribute('onclick')&&c.getAttribute('onclick').includes('setImageCols'))c.classList.remove('on');});event.currentTarget.classList.add('on');}
 
 function doSearch(q){
   if(!q.trim()) return; q=q.toLowerCase();
-  const mm=DB.models.filter(m=>m.name.toLowerCase().includes(q)||(m.tags||[]).some(t=>t.toLowerCase().includes(q))||(m.creator||'').toLowerCase().includes(q));
+  const mv=DB.videos.filter(v=>(v.title||'').toLowerCase().includes(q)||(v.prompt||'').toLowerCase().includes(q)||(v.model||'').toLowerCase().includes(q));
   const mi=DB.images.filter(i=>(i.title||'').toLowerCase().includes(q)||(i.prompt||'').toLowerCase().includes(q)||(i.model||'').toLowerCase().includes(q));
-  showPage('models');
-  document.getElementById('modelsGrid').innerHTML=mm.map(modelCardHTML).join('')+(mi.length?`<div style="grid-column:1/-1;margin-top:8px;color:var(--text3);font-size:12px">Also found ${mi.length} image(s). <a href="#" onclick="showPage('images')" style="color:var(--accent2)">View →</a></div>`:'');
-  if(!mm.length&&!mi.length)document.getElementById('modelsGrid').innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="icon">🔍</div><h3>No results for "${esc(q)}"</h3></div>`;
+  showPage('videos');
+  document.getElementById('videosGrid').innerHTML=mv.map(videoCardHTML).join('')+(mi.length?`<div style="grid-column:1/-1;margin-top:8px;color:var(--text3);font-size:12px">Also found ${mi.length} image(s). <a href="#" onclick="showPage('images')" style="color:var(--accent2)">View →</a></div>`:'');
+  if(!mv.length&&!mi.length)document.getElementById('videosGrid').innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="icon">🔍</div><h3>No results for "${esc(q)}"</h3></div>`;
 }
 
 // TOAST
@@ -1100,7 +1396,21 @@ function toast(msg,type='success'){const area=document.getElementById('toastArea
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmt(n){return n>=1000?(n/1000).toFixed(1)+'k':n;}
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeLightbox(null,true);closeMModal(null,true);closeSettings(null,true);}});
+document.addEventListener('keydown', e => {
+  const lbOpen = document.getElementById('lightbox').classList.contains('open');
+  if (e.key === 'Escape') {
+    closeLightbox(null, true);
+    closeVideoLightbox(null, true);
+    closeSettings(null, true);
+  }
+  if (lbOpen) {
+    if (e.key === 'ArrowLeft')  lbNavigate(-1);
+    if (e.key === 'ArrowRight') lbNavigate(1);
+    if (e.key === '+' || e.key === '=') lbZoomStep(0.25);
+    if (e.key === '-')           lbZoomStep(-0.25);
+    if (e.key === '0')           lbZoomReset();
+  }
+});
 
 // ═══════════════════════════════════════════
 //  SETTINGS
@@ -1108,40 +1418,31 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeLightbox(null,
 function openSettings() {
   const cur = getCustomDir();
   document.getElementById('settingsFolderDisplay').textContent = cur || '(Using default AppData folder)';
-  // Load and show the default path too
   tauriCall('get_default_images_dir', {}).then(p => {
     document.getElementById('settingsDefaultDir').textContent = p;
     if (!cur) document.getElementById('settingsFolderDisplay').textContent = p + '  (default)';
   }).catch(() => {});
   document.getElementById('settingsModal').classList.add('open');
 }
-
 function closeSettings(e, force) {
   if (force || (e && e.target === document.getElementById('settingsModal'))) {
     document.getElementById('settingsModal').classList.remove('open');
   }
 }
-
 async function chooseFolder() {
   try {
     const chosen = await tauriCall('pick_images_folder', {});
-    if (!chosen) return; // user cancelled
+    if (!chosen) return;
     if (!DB.settings) DB.settings = {};
     DB.settings.imagesDir = chosen;
     await saveDB();
-    // Bust the blob cache — images might now be in a different location
     blobCache = {};
     document.getElementById('settingsFolderDisplay').textContent = chosen;
     await showStorageInfo();
-    toast('Images folder updated! New images will save here.', 'success');
-    // Re-render so images reload from new path
-    renderImages();
-    renderHome();
-  } catch(e) {
-    toast('Could not open folder picker: ' + e, 'error');
-  }
+    toast('Storage folder updated!', 'success');
+    renderVideos(); renderImages(); renderHome();
+  } catch(e) { toast('Could not open folder picker: ' + e, 'error'); }
 }
-
 async function resetFolder() {
   if (!confirm('Reset to the default AppData folder?\nThis does not move any existing files.')) return;
   if (!DB.settings) DB.settings = {};
@@ -1152,8 +1453,7 @@ async function resetFolder() {
   document.getElementById('settingsFolderDisplay').textContent = defaultPath + '  (default)';
   await showStorageInfo();
   toast('Folder reset to default.', 'success');
-  renderImages();
-  renderHome();
+  renderVideos(); renderImages(); renderHome();
 }
 
 // ── INIT ──
